@@ -5,22 +5,21 @@ import {PrimaryNavItem} from '@jahia/moonstone';
 import {registerRoute} from './Administration.route';
 import {useTranslation} from 'react-i18next';
 import Settings from '@jahia/moonstone/dist/icons/Setting';
-
-const ROUTE = '/administration';
+import constants from './Administration.constants';
 
 const AdministrationGroup = () => {
     const history = useHistory();
     const {t} = useTranslation('jahia-administration');
     return (
-        <PrimaryNavItem key={ROUTE}
-                        isSelected={history.location.pathname.endsWith(ROUTE)}
+        <PrimaryNavItem key={constants.DEFAULT_ROUTE}
+                        isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
                         icon={<Settings/>}
-                        onClick={() => history.push(ROUTE)}/>
+                        onClick={() => history.push(`${constants.DEFAULT_ROUTE}/replace-with-something-sensible`)}/>
     );
 };
 
-const Administration = () => 'Jahia Administration Component';
+const Administration = () => <h2 style={{color: 'white'}}>Jahia Administration Component</h2>;
 
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
