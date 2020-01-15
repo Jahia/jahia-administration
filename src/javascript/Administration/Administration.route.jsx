@@ -12,6 +12,4 @@ export const registerRoute = (componentToRender = 'Jahia Administration') => {
     });
 };
 
-window.contextJsParameters.namespaceResolvers['jahia-administration'] = lang => require('../../main/resources/javascript/locales/' + lang + '.json');
-
 console.log('%c Jahia Administration is activated', 'color: #3c8cba');

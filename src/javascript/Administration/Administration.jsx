@@ -6,6 +6,18 @@ import {registerRoute} from './Administration.route';
 import {useTranslation} from 'react-i18next';
 import Settings from '@jahia/moonstone/dist/icons/Setting';
 import constants from './Administration.constants';
+import {loadNamespace} from './Administration.loadNamespace';
+
+// Entry point component
+const Administration = () => {
+    const loadingNamespace = loadNamespace('jahia-administration');
+
+    if (loadingNamespace) {
+        return 'Loading screen';
+    }
+
+    return <h2 style={{color: 'white'}}>Jahia Administration Component</h2>;
+};
 
 const AdministrationGroup = () => {
     const history = useHistory();
@@ -18,8 +30,6 @@ const AdministrationGroup = () => {
                         onClick={() => history.push(`${constants.DEFAULT_ROUTE}/replace-with-something-sensible`)}/>
     );
 };
-
-const Administration = () => <h2 style={{color: 'white'}}>Jahia Administration Component</h2>;
 
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
