@@ -10,11 +10,8 @@ import Setting from '@jahia/moonstone/dist/icons/Setting';
 import SiteWeb from '@jahia/moonstone/dist/icons/SiteWeb';
 import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
-import Iframe from 'react-iframe';
+import AdminIframe from './AdministrationIframe';
 import {loadNamespace} from './Administration.loadNamespace';
-
-let endPath = `/${window.contextJsParameters.locale}/settings.aboutJahia.html`;
-const ABOUT_FRAME_SRC = `/cms/adminframe/default${endPath}`;
 
 const AdministrationGroup = () => {
     const history = useHistory();
@@ -36,29 +33,75 @@ const Administration = () => {
         return 'Loading screen';
     }
 
-    console.log(Accordion, AccordionItem);
+    const routes = [];
     const routesServer = registry.find({
         type: 'route',
         target: 'administration-server'
     });
-    let data = [{
-        id: 'About',
-        label: 'About',
-        iconStart: <Info size="small"/>,
-        children: []
-    }];
+    const routesServerSystemHealth = registry.find({
+        type: 'route',
+        target: 'administration-server-systemhealth'
+    });
+    routes.push(...routesServer);
+    routes.push(...routesServerSystemHealth);
+    console.log('Administration routes', routesServer);
+    let dataServer = [
+        {
+            id: 'aboutjahia',
+            label: 'About Jahia',
+            iconStart: <Info/>,
+            route: `${constants.DEFAULT_ROUTE}/aboutJahia`,
+            children: []
+        },
+        {
+            id: 'configuration',
+            label: 'Configuration',
+            isSelectable: false,
+            children: []
+        },
+        {
+            id: 'systemhealth',
+            label: 'System Health',
+            isSelectable: false,
+            children: [{
+                id: 'systeminfos',
+                label: 'System Infos',
+                iconStart: <Info/>,
+                route: `${constants.DEFAULT_ROUTE}/systemInfos`,
+                children: []
+            }]
+        }
+    ];
+    let getSelectedItems = function () {
+        let selectedItems = [];
+        let split = history.location.pathname.split('/');
+        selectedItems.push(split.pop().toLowerCase());
+        console.log(selectedItems);
+        return selectedItems;
+    };
+
+    let getOpenedByDefault = function () {
+        if (dataServer.find(leaf => {
+            console.log('leaf', leaf, getSelectedItems());
+            return leaf.id === getSelectedItems()[0];
+        }) !== undefined) {
+            console.log('returning server');
+            return 'server';
+        }
+
+        return '';
+    };
+
     return (
         <LayoutModule
             navigation={
                 <SecondaryNav header={<Typography variant="section">Administration</Typography>}>
-                    <PrimaryNavItem key={constants.DEFAULT_ROUTE + '/aboutJahia'}
-                                    isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE + '/aboutJahia')}
-                                    label="About"
-                                    icon={<Info/>}
-                                    onClick={() => history.push(`${constants.DEFAULT_ROUTE}/aboutJahia`)}/>
-                    <Accordion>
+                    <Accordion openByDefault={getOpenedByDefault()}>
                         <AccordionItem id="server" label="Server" icon={<Server/>}>
-                            <TreeView data={data}/>
+                            <TreeView data={dataServer}
+                                      selectedItems={getSelectedItems()}
+                                      openedItems={getSelectedItems()}
+                                      onClick={elt => history.push(elt.route)}/>
                         </AccordionItem>
                         <AccordionItem id="sites" label="Sites" icon={<SiteWeb/>}/>
                     </Accordion>
@@ -66,7 +109,7 @@ const Administration = () => {
             }
             content={
                 <Switch>
-                    {routesServer.map(r =>
+                    {routes.map(r =>
                         <Route key={r.key} path={r.path} render={r.render}/>
                     )}
                 </Switch>
@@ -75,13 +118,10 @@ const Administration = () => {
     );
 };
 
-const About = () => {
-    return <Iframe url={window.contextJsParameters.contextPath + ABOUT_FRAME_SRC} width="100%" height="100%"/>;
-};
-
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
-    registerRouteLv2(<About/>);
+    registerRouteLv2(<AdminIframe route="aboutJahia"/>, 'aboutJahia', null, 'About Jahia', <Info/>);
+    registerRouteLv2(<AdminIframe route="systemInfos"/>, 'systemInfos', 'systemhealth', 'System Infos', <Info/>);
     registry.add('administrationGroupItem', {
         type: 'bottomAdminGroup',
         target: ['nav-root-bottom:1'],
