@@ -12,12 +12,19 @@ export const registerRoute = (componentToRender = 'Jahia Administration') => {
     });
 };
 
-export const registerRouteLv2 = (componentToRender = 'Jahia Administration', path = '/') => {
-    registry.add(`administration-server-${path.toLowerCase()}`, {
+export const registerRouteLv2 = (level = 'server', componentToRender = 'Jahia Administration', path = '', label = 'Default Label', icon = null, target = '', priority = 1, childrenTarget = null, isSelectable = true) => {
+    let administrationServer = level === 'server' ? 'administration-server' : 'administration-sites';
+    let s = target === '' ? administrationServer : `${administrationServer}-${target}`;
+    let path1 = path === '' ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
+    registry.add(`${administrationServer}-${path.toLowerCase()}`, {
         type: 'route',
-        target: ['administration-server:1'],
-        path: `${constants.DEFAULT_ROUTE}/${path}`, // Catch everything administration and let the app handle routing logic
-        defaultPath: `${constants.DEFAULT_ROUTE}/${path}`,
+        target: [`${s}:${priority}`],
+        path: path1,
+        defaultPath: path1,
+        icon: icon,
+        label: label,
+        childrenTarget: childrenTarget,
+        isSelectable: isSelectable,
         render: () => <Suspense fallback="loading ...">{componentToRender}</Suspense>
     });
 };
