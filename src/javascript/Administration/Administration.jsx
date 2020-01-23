@@ -4,7 +4,6 @@ import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
 import {registerRoute, registerRouteLv2} from './Administration.route';
 import {useTranslation} from 'react-i18next';
-import Info from '@jahia/moonstone/dist/icons/Info';
 import Server from '@jahia/moonstone/dist/icons/Server';
 import Setting from '@jahia/moonstone/dist/icons/Setting';
 import SiteWeb from '@jahia/moonstone/dist/icons/SiteWeb';
