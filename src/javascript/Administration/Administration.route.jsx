@@ -12,4 +12,16 @@ export const registerRoute = (componentToRender = 'Jahia Administration') => {
     });
 };
 
+export const registerRouteLv2 = (componentToRender = 'Jahia Administration', path = '/') => {
+    registry.add(`administration-server-${path.toLowerCase()}`, {
+        type: 'route',
+        target: ['administration-server:1'],
+        path: `${constants.DEFAULT_ROUTE}/${path}`, // Catch everything administration and let the app handle routing logic
+        defaultPath: `${constants.DEFAULT_ROUTE}/${path}`,
+        render: () => <Suspense fallback="loading ...">{componentToRender}</Suspense>
+    });
+};
+
+window.contextJsParameters.namespaceResolvers['jahia-administration'] = lang => require('../../main/resources/javascript/locales/' + lang + '.json');
+
 console.log('%c Jahia Administration is activated', 'color: #3c8cba');
