@@ -1,4 +1,5 @@
 import React, {Suspense} from 'react';
+import PropTypes from 'prop-types';
 import {registry} from '@jahia/registry';
 import AdministrationIframe from './iFrames/AdministrationIframe';
 import SiteIframe from './iFrames/SiteIframe';
@@ -39,7 +40,7 @@ export const registerRouteLv2 = (level = 'server', route = null, path = null, la
 };
 
 export const RenderIframe = props => {
-    console.log("Frame", props);
+    console.log('Frame', props);
     const IframeComponent = props.level === 'server' ? AdministrationIframe : SiteIframe;
 
     if (props.route === null) {
@@ -55,7 +56,13 @@ export const RenderIframe = props => {
         <Suspense fallback="loading ...">
             <IframeComponent route={props.route}/>
         </Suspense>
-    )
+    );
+};
+
+RenderIframe.propTypes = {
+    route: PropTypes.string.isRequired,
+    level: PropTypes.string.isRequired,
+    render: PropTypes.func.isRequired
 };
 
 console.log('%c Jahia Administration is activated', 'color: #3c8cba');

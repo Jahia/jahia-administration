@@ -134,7 +134,7 @@ const Administration = () => {
 
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
-    registerRouteLv2('sites', "manageModules", ':siteKey/manageModules', 'Modules', null);
+    registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
     registry.add('administrationGroupItem', {
         type: 'bottomAdminGroup',
         target: ['nav-root-bottom:1'],
