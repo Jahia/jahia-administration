@@ -2,15 +2,13 @@ import React from 'react';
 import {registry} from '@jahia/registry';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
-import {registerRoute, registerRouteLv2} from './Administration.route';
+import {registerRoute, registerRouteLv2, RenderIframe} from './Administration.route';
 import {useTranslation} from 'react-i18next';
 import Server from '@jahia/moonstone/dist/icons/Server';
 import Setting from '@jahia/moonstone/dist/icons/Setting';
 import SiteWeb from '@jahia/moonstone/dist/icons/SiteWeb';
 import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
-import AdminIframe from './AdministrationIframe';
-import SiteIframe from './SiteIframe';
 import {loadNamespace} from './Administration.loadNamespace';
 
 const AdministrationGroup = () => {
@@ -126,7 +124,7 @@ const Administration = () => {
             content={
                 <Switch>
                     {routes.map(r =>
-                        <Route key={r.key} path={r.path} render={r.render}/>
+                        <Route key={r.key} path={r.path} render={() => <RenderIframe {...r}/>}/>
                     )}
                 </Switch>
             }
@@ -136,11 +134,7 @@ const Administration = () => {
 
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
-    registerRouteLv2('server', <AdminIframe route="aboutJahia"/>, 'aboutJahia', 'About Jahia', null);
-    registerRouteLv2('server', null, 'configuration', 'Configuration', null, '', 1, 'configuration', false);
-    registerRouteLv2('server', null, 'systemHealth', 'System Health', null, '', 2, 'systemhealth', false);
-    registerRouteLv2('server', <AdminIframe route="systemInfos"/>, 'systemInfos', 'System Infos', null, 'systemhealth');
-    registerRouteLv2('sites', <SiteIframe route="manageModules"/>, ':siteKey/manageModules', 'Modules', null);
+    registerRouteLv2('sites', "manageModules", ':siteKey/manageModules', 'Modules', null);
     registry.add('administrationGroupItem', {
         type: 'bottomAdminGroup',
         target: ['nav-root-bottom:1'],

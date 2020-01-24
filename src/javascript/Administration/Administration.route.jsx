@@ -1,5 +1,7 @@
 import React, {Suspense} from 'react';
 import {registry} from '@jahia/registry';
+import AdministrationIframe from './iFrames/AdministrationIframe';
+import SiteIframe from './iFrames/SiteIframe';
 import constants from './Administration.constants';
 
 export const registerRoute = (componentToRender = 'Jahia Administration') => {
@@ -12,10 +14,11 @@ export const registerRoute = (componentToRender = 'Jahia Administration') => {
     });
 };
 
-export const registerRouteLv2 = (level = 'server', componentToRender = 'Jahia Administration', path = '', label = 'Default Label', icon = null, target = '', priority = 1, childrenTarget = null, isSelectable = true) => {
+export const registerRouteLv2 = (level = 'server', route = null, path = null, label = 'Default Label', icon = null, target = null, priority = 1, childrenTarget = null, isSelectable = true) => {
     let administrationServer = level === 'server' ? 'administration-server' : 'administration-sites';
-    let s = target === '' ? administrationServer : `${administrationServer}-${target}`;
-    let path1 = path === '' ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
+    let IframeComponent = level === 'server' ? AdministrationIframe : SiteIframe;
+    let s = target === null ? administrationServer : `${administrationServer}-${target}`;
+    let path1 = path === null ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
     registry.add(`${administrationServer}-${path.toLowerCase()}`, {
         type: 'route',
         target: [`${s}:${priority}`],
@@ -25,10 +28,34 @@ export const registerRouteLv2 = (level = 'server', componentToRender = 'Jahia Ad
         label: label,
         childrenTarget: childrenTarget,
         isSelectable: isSelectable,
-        render: () => <Suspense fallback="loading ...">{componentToRender}</Suspense>
+        render: () => (
+            <Suspense fallback="loading ...">
+                {route && <IframeComponent route={route}/>}
+            </Suspense>
+        ),
+        level,
+        route
     });
 };
 
-window.contextJsParameters.namespaceResolvers['jahia-administration'] = lang => require('../../main/resources/javascript/locales/' + lang + '.json');
+export const RenderIframe = props => {
+    console.log("Frame", props);
+    const IframeComponent = props.level === 'server' ? AdministrationIframe : SiteIframe;
+
+    if (props.route === null) {
+        return null;
+    }
+
+    // If render fcn is defined use it as it implies that the user has something custom in mind
+    if (props.render) {
+        return props.render();
+    }
+
+    return (
+        <Suspense fallback="loading ...">
+            <IframeComponent route={props.route}/>
+        </Suspense>
+    )
+};
 
 console.log('%c Jahia Administration is activated', 'color: #3c8cba');
