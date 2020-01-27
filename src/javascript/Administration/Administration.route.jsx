@@ -21,6 +21,7 @@ export const registerRouteLv2 = (level = 'server', route = null, path = null, la
     let s = target === null ? administrationServer : `${administrationServer}-${target}`;
     let path1 = path === null ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
     registry.add(`${administrationServer}-${path.toLowerCase()}`, {
+        id: route,
         type: 'route',
         target: [`${s}:${priority}`],
         path: path1,
