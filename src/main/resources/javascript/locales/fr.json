@@ -1,5 +1,7 @@
 {
   "jahia-administration": {
-    "label": "FR Administration"
+    "label": "fr Administration",
+    "server": "fr Server",
+    "sites": "fr Sites"
   }
 }

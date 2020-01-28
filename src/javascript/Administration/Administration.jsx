@@ -25,6 +25,7 @@ const AdministrationGroup = () => {
 
 const Administration = () => {
     const history = useHistory();
+    const {t} = useTranslation();
     const loadingNamespace = loadNamespace('jahia-administration');
 
     if (loadingNamespace) {
@@ -72,8 +73,6 @@ const Administration = () => {
         target: 'administration-sites'
     }), dataSites, 'administration-sites');
 
-    console.log('Administration routes', routes);
-
     let getSelectedItems = function () {
         let selectedItems = [];
         let split = history.location.pathname.split('/');
@@ -93,7 +92,7 @@ const Administration = () => {
         return '';
     };
 
-    const recursiveIdCheck = function(data, selectedItem) {
+    const recursiveIdCheck = function (data, selectedItem) {
         return data.find(node => {
             if (node.id === selectedItem) {
                 return true;
@@ -102,9 +101,10 @@ const Administration = () => {
             if (node.children && node.children.length > 0) {
                 return recursiveIdCheck(node.children, selectedItem);
             }
+
+            return false;
         }) !== undefined;
     };
-
 
     const treeSelected = getSelectedItems();
     const accordionOpenTab = getOpenedByDefault(treeSelected[0]);
@@ -113,13 +113,13 @@ const Administration = () => {
             navigation={
                 <SecondaryNav header={<Typography variant="section">Administration</Typography>}>
                     <Accordion openByDefault={accordionOpenTab}>
-                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label="Server" icon={<Server/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
                             <TreeView data={dataServer}
                                       selectedItems={treeSelected}
                                       openedItems={treeSelected}
                                       onClick={elt => history.push(elt.route)}/>
                         </AccordionItem>
-                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label="Sites" icon={<SiteWeb/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb/>}>
                             <TreeView data={dataSites}
                                       selectedItems={treeSelected}
                                       openedItems={treeSelected}
