@@ -49,7 +49,7 @@ const Administration = () => {
 
             if (route.childrenTarget !== null) {
                 createTreeStructureAndAggregateRoutes(registry.find({
-                    type: 'route',
+                    type: 'adminRoute',
                     target: `${registryTargetParent}-${route.childrenTarget}`
                 }), treeEntry.children);
             }
@@ -64,12 +64,12 @@ const Administration = () => {
     };
 
     createTreeStructureAndAggregateRoutes(registry.find({
-        type: 'route',
+        type: 'adminRoute',
         target: 'administration-server'
     }), dataServer, 'administration-server');
 
     createTreeStructureAndAggregateRoutes(registry.find({
-        type: 'route',
+        type: 'adminRoute',
         target: 'administration-sites'
     }), dataSites, 'administration-sites');
 

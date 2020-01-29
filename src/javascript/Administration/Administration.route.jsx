@@ -19,7 +19,7 @@ export const registerRouteLv2 = (level = 'server', route = null, path = null, la
     let IframeComponent = level === 'server' ? AdministrationIframe : SiteIframe;
     let s = target === null ? administrationServer : `${administrationServer}-${target}`;
     let path1 = path === null ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
-    registry.add('route', `${administrationServer}-${path.toLowerCase()}`, {
+    registry.add('adminRoute', `${administrationServer}-${path.toLowerCase()}`, {
         id: route,
         targets: [`${s}:${priority}`],
         path: path1,
