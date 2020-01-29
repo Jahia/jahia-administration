@@ -1,5 +1,5 @@
 import React from 'react';
-import {registry} from '@jahia/registry';
+import {registry} from '@jahia/ui-extender';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
 import {registerRoute, registerRouteLv2, RenderIframe} from './Administration.route';
@@ -92,6 +92,8 @@ const Administration = () => {
         return '';
     };
 
+    console.log('Tree', dataServer);
+
     const recursiveIdCheck = function (data, selectedItem) {
         return data.find(node => {
             if (node.id === selectedItem) {
@@ -142,9 +144,8 @@ const Administration = () => {
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
     registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
-    registry.add('administrationGroupItem', {
-        type: 'bottomAdminGroup',
-        target: ['nav-root-bottom:1'],
+    registry.add('bottomAdminGroup', 'administrationGroupItem', {
+        targets: ['nav-root-bottom:1'],
         render: () => <AdministrationGroup/>
     });
 };
