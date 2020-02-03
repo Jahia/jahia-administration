@@ -1,14 +1,13 @@
 import React, {Suspense} from 'react';
 import PropTypes from 'prop-types';
-import {registry} from '@jahia/registry';
+import {registry} from '@jahia/ui-extender';
 import AdministrationIframe from './iFrames/AdministrationIframe';
 import SiteIframe from './iFrames/SiteIframe';
 import constants from './Administration.constants';
 
 export const registerRoute = (componentToRender = 'Jahia Administration') => {
-    registry.add('route-administration', {
-        type: 'route',
-        target: ['nav-root-top:1'],
+    registry.add('route', 'route-administration', {
+        targets: ['nav-root-top:1'],
         path: `${constants.DEFAULT_ROUTE}/*`, // Catch everything administration and let the app handle routing logic
         defaultPath: constants.DEFAULT_ROUTE,
         render: () => <Suspense fallback="loading ...">{componentToRender}</Suspense>
@@ -20,9 +19,9 @@ export const registerRouteLv2 = (level = 'server', route = null, path = null, la
     let IframeComponent = level === 'server' ? AdministrationIframe : SiteIframe;
     let s = target === null ? administrationServer : `${administrationServer}-${target}`;
     let path1 = path === null ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
-    registry.add(`${administrationServer}-${path.toLowerCase()}`, {
-        type: 'route',
-        target: [`${s}:${priority}`],
+    registry.add('adminRoute', `${administrationServer}-${path.toLowerCase()}`, {
+        id: route,
+        targets: [`${s}:${priority}`],
         path: path1,
         defaultPath: path1,
         icon: icon,

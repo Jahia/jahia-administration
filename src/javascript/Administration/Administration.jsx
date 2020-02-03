@@ -1,5 +1,5 @@
 import React from 'react';
-import {registry} from '@jahia/registry';
+import {registry} from '@jahia/ui-extender';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
 import {registerRoute, registerRouteLv2, RenderIframe} from './Administration.route';
@@ -25,6 +25,7 @@ const AdministrationGroup = () => {
 
 const Administration = () => {
     const history = useHistory();
+    const {t} = useTranslation();
     const loadingNamespace = loadNamespace('jahia-administration');
 
     if (loadingNamespace) {
@@ -37,7 +38,7 @@ const Administration = () => {
     let createTreeStructureAndAggregateRoutes = function (currentLevelRoute, parent, registryTargetParent) {
         currentLevelRoute.forEach(route => {
             let treeEntry = {
-                id: route.label.toLowerCase().replace(' ', ''),
+                id: route.id || route.label.toLowerCase().replace(' ', ''),
                 label: route.label,
                 isSelectable: route.isSelectable,
                 children: []
@@ -48,7 +49,7 @@ const Administration = () => {
 
             if (route.childrenTarget !== null) {
                 createTreeStructureAndAggregateRoutes(registry.find({
-                    type: 'route',
+                    type: 'adminRoute',
                     target: `${registryTargetParent}-${route.childrenTarget}`
                 }), treeEntry.children);
             }
@@ -63,59 +64,67 @@ const Administration = () => {
     };
 
     createTreeStructureAndAggregateRoutes(registry.find({
-        type: 'route',
+        type: 'adminRoute',
         target: 'administration-server'
     }), dataServer, 'administration-server');
 
     createTreeStructureAndAggregateRoutes(registry.find({
-        type: 'route',
+        type: 'adminRoute',
         target: 'administration-sites'
     }), dataSites, 'administration-sites');
-
-    console.log('Administration routes', routes);
 
     let getSelectedItems = function () {
         let selectedItems = [];
         let split = history.location.pathname.split('/');
-        selectedItems.push(split.pop().toLowerCase());
-        console.log(selectedItems);
+        selectedItems.push(split.pop());
         return selectedItems;
     };
 
-    let getOpenedByDefault = function () {
-        let selectedItem = getSelectedItems()[0];
-        if (dataServer.find(leaf => {
-            return leaf.id === selectedItem;
-        }) !== undefined) {
-            console.log('returning server');
-            return 'server';
+    let getOpenedByDefault = function (selectedItem) {
+        if (recursiveIdCheck(dataServer, selectedItem)) {
+            return constants.ACCORDION_TABS.SERVER;
         }
 
-        if (dataSites.find(leaf => {
-            return leaf.id === selectedItem;
-        }) !== undefined) {
-            console.log('returning server');
-            return 'sites';
+        if (recursiveIdCheck(dataSites, selectedItem)) {
+            return constants.ACCORDION_TABS.SITE;
         }
 
         return '';
     };
 
+    console.log('Tree', dataServer);
+
+    const recursiveIdCheck = function (data, selectedItem) {
+        return data.find(node => {
+            if (node.id === selectedItem) {
+                return true;
+            }
+
+            if (node.children && node.children.length > 0) {
+                return recursiveIdCheck(node.children, selectedItem);
+            }
+
+            return false;
+        }) !== undefined;
+    };
+
+    const treeSelected = getSelectedItems();
+    const accordionOpenTab = getOpenedByDefault(treeSelected[0]);
     return (
         <LayoutModule
             navigation={
                 <SecondaryNav header={<Typography variant="section">Administration</Typography>}>
-                    <Accordion openByDefault={getOpenedByDefault()}>
-                        <AccordionItem id="server" label="Server" icon={<Server/>}>
+                    <Accordion openByDefault={accordionOpenTab}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
                             <TreeView data={dataServer}
-                                      selectedItems={getSelectedItems()}
-                                      openedItems={getSelectedItems()}
+                                      selectedItems={treeSelected}
+                                      openedItems={treeSelected}
                                       onClick={elt => history.push(elt.route)}/>
                         </AccordionItem>
-                        <AccordionItem id="sites" label="Sites" icon={<SiteWeb/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb/>}>
                             <TreeView data={dataSites}
-                                      selectedItems={getSelectedItems()}
-                                      openedItems={getSelectedItems()}
+                                      selectedItems={treeSelected}
+                                      openedItems={treeSelected}
                                       onClick={elt => history.push(elt.route.replace(':siteKey', window.contextJsParameters.siteKey))}/>
                         </AccordionItem>
                     </Accordion>
@@ -135,9 +144,8 @@ const Administration = () => {
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
     registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
-    registry.add('administrationGroupItem', {
-        type: 'bottomAdminGroup',
-        target: ['nav-root-bottom:1'],
+    registry.add('bottomAdminGroup', 'administrationGroupItem', {
+        targets: ['nav-root-bottom:1'],
         render: () => <AdministrationGroup/>
     });
 };
