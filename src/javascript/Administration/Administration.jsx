@@ -39,7 +39,7 @@ const Administration = () => {
         currentLevelRoute.forEach(route => {
             let treeEntry = {
                 id: route.id || route.label.toLowerCase().replace(' ', ''),
-                label: route.label,
+                label: t(route.label),
                 isSelectable: route.isSelectable,
                 children: []
             };
