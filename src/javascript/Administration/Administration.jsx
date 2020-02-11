@@ -118,14 +118,14 @@ const Administration = () => {
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
                             <TreeView data={dataServer}
                                       selectedItems={treeSelected}
-                                      openedItems={treeSelected}
-                                      onClick={elt => history.push(elt.route)}/>
+                                      defaultOpenedItems={treeSelected}
+                                      onClickItem={elt => history.push(elt.route)}/>
                         </AccordionItem>
                         <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb/>}>
                             <TreeView data={dataSites}
                                       selectedItems={treeSelected}
-                                      openedItems={treeSelected}
-                                      onClick={elt => history.push(elt.route.replace(':siteKey', window.contextJsParameters.siteKey))}/>
+                                      defaultOpenedItems={treeSelected}
+                                      onClickItem={elt => history.push(elt.route.replace(':siteKey', window.contextJsParameters.siteKey))}/>
                         </AccordionItem>
                     </Accordion>
                 </SecondaryNav>
