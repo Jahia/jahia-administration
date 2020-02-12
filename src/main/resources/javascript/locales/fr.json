@@ -2,6 +2,8 @@
   "jahia-administration": {
     "label": "fr Administration",
     "server": "fr Server",
-    "sites": "fr Sites"
+    "sites": "fr Sites",
+    "about": "Get information about the system, manage system components, users, roles, languages and web projects.",
+    "learnmore": "Learn more on the Academy"
   }
 }

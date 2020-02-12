@@ -8,7 +8,7 @@ import constants from './Administration.constants';
 export const registerRoute = (componentToRender = 'Jahia Administration') => {
     registry.add('route', 'route-administration', {
         targets: ['nav-root-top:1'],
-        path: `${constants.DEFAULT_ROUTE}/*`, // Catch everything administration and let the app handle routing logic
+        path: `${constants.DEFAULT_ROUTE}*`, // Catch everything administration and let the app handle routing logic
         defaultPath: constants.DEFAULT_ROUTE,
         render: () => <Suspense fallback="loading ...">{componentToRender}</Suspense>
     });
