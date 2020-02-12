@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React from 'react';
 import {registry} from '@jahia/ui-extender';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
@@ -20,7 +20,7 @@ const AdministrationGroup = () => {
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
                         icon={<Setting/>}
-                        onClick={() => history.push(`${constants.DEFAULT_ROUTE}/aboutJahia`)}/>
+                        onClick={() => history.push(`${constants.DEFAULT_ROUTE}`)}/>
     );
 };
 
@@ -119,7 +119,7 @@ const Administration = () => {
     return (
         <LayoutModule
             navigation={
-                <SecondaryNav header={<Typography variant="section">Administration</Typography>}>
+                <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
                     <Accordion openByDefault={accordionOpenTab}>
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
                             <TreeView data={dataServer}
@@ -152,7 +152,7 @@ export const registerAdministration = () => {
     registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
     registry.add('adminRoute', 'administration-server', {
         omitFromTree: true,
-        targets: ['administration-server:999'],
+        targets: ['administration-server:ya999'],
         path: `${constants.DEFAULT_ROUTE}`,
         defaultPath: constants.DEFAULT_ROUTE,
         render: () => <AdministrationEmpty/>
