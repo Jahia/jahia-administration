@@ -10,6 +10,7 @@ import SiteWeb from '@jahia/moonstone/dist/icons/SiteWeb';
 import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
 import {loadNamespace} from './Administration.loadNamespace';
+import AdministrationEmpty from './Administration.empty';
 
 const AdministrationGroup = () => {
     const history = useHistory();
@@ -19,7 +20,7 @@ const AdministrationGroup = () => {
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
                         icon={<Setting/>}
-                        onClick={() => history.push(`${constants.DEFAULT_ROUTE}/aboutJahia`)}/>
+                        onClick={() => history.push(`${constants.DEFAULT_ROUTE}`)}/>
     );
 };
 
@@ -37,6 +38,11 @@ const Administration = () => {
     const dataSites = [];
     let createTreeStructureAndAggregateRoutes = function (currentLevelRoute, parent, registryTargetParent) {
         currentLevelRoute.forEach(route => {
+            if (route.omitFromTree) {
+                routes.push(route);
+                return;
+            }
+
             let treeEntry = {
                 id: route.id || route.label.toLowerCase().replace(' ', ''),
                 label: t(route.label),
@@ -89,7 +95,7 @@ const Administration = () => {
             return constants.ACCORDION_TABS.SITE;
         }
 
-        return '';
+        return 'server';
     };
 
     console.log('Tree', dataServer);
@@ -113,7 +119,7 @@ const Administration = () => {
     return (
         <LayoutModule
             navigation={
-                <SecondaryNav header={<Typography variant="section">Administration</Typography>}>
+                <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
                     <Accordion openByDefault={accordionOpenTab}>
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
                             <TreeView data={dataServer}
@@ -144,6 +150,13 @@ const Administration = () => {
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
     registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
+    registry.add('adminRoute', 'administration-server', {
+        omitFromTree: true,
+        targets: ['administration-server:ya999'],
+        path: `${constants.DEFAULT_ROUTE}`,
+        defaultPath: constants.DEFAULT_ROUTE,
+        render: () => <AdministrationEmpty/>
+    });
     registry.add('bottomAdminGroup', 'administrationGroupItem', {
         targets: ['nav-root-bottom:1'],
         render: () => <AdministrationGroup/>
