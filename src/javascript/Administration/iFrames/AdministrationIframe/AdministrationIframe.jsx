@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 let path = endPath => {
-    return `/cms/adminframe/default/${window.contextJsParameters.locale}/settings.${endPath}.html`;
+    return `/cms/adminframe/default/${window.contextJsParameters.locale}/settings.${endPath}.html?redirect=false`;
 };
 
 export const AdminIframe = ({route}) => (

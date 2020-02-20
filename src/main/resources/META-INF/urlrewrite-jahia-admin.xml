@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<urlrewrite>
+
+    <rule>
+        <name>Jahia to V8</name>
+        <note>Redirects old /administration urls</note>
+        <condition operator="notequal" type="parameter" name="redirect">false</condition>
+        <from>^/cms/admin/(.*)settings.(.*).html$</from>
+        <to type="redirect">%{context-path}/jahia/administration/$2</to>
+    </rule>
+
+</urlrewrite>
