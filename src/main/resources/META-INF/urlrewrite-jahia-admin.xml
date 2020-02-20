@@ -5,7 +5,7 @@
 <urlrewrite>
 
     <rule>
-        <name>Jahia to V8</name>
+        <name>Jahia administration to V8</name>
         <note>Redirects old /administration urls</note>
         <condition operator="notequal" type="parameter" name="redirect">false</condition>
         <from>^/cms/admin/(.*)settings\.(.*)\.html$</from>
