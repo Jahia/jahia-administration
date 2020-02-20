@@ -9,7 +9,7 @@
         <note>Redirects old /administration urls</note>
         <condition operator="notequal" type="parameter" name="redirect">false</condition>
         <from>^/cms/admin/(.*)settings.(.*).html$</from>
-        <to type="redirect">%{context-path}/modules/moonstone/administration/$2</to>
+        <to type="redirect">%{context-path}/jahia/administration/$2</to>
     </rule>
 
 </urlrewrite>
