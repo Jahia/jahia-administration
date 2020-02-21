@@ -152,7 +152,7 @@ export const registerAdministration = () => {
     registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
     registry.add('adminRoute', 'administration-server', {
         omitFromTree: true,
-        targets: ['administration-server:ya999'],
+        targets: ['administration-server:999'],
         path: `${constants.DEFAULT_ROUTE}`,
         defaultPath: constants.DEFAULT_ROUTE,
         render: () => <AdministrationEmpty/>
