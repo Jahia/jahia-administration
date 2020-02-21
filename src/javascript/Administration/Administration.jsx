@@ -19,7 +19,7 @@ const AdministrationGroup = () => {
         <PrimaryNavItem key={constants.DEFAULT_ROUTE}
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
-                        icon={<Setting/>}
+                        icon={<Setting size="big"/>}
                         onClick={() => history.push(`${constants.DEFAULT_ROUTE}`)}/>
     );
 };
@@ -121,13 +121,13 @@ const Administration = () => {
             navigation={
                 <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
                     <Accordion openedItem={accordionOpenTab}>
-                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server size="big"/>}>
                             <TreeView data={dataServer}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
                                       onClickItem={elt => history.push(elt.route)}/>
                         </AccordionItem>
-                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb size="big"/>}>
                             <TreeView data={dataSites}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
