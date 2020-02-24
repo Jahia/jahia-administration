@@ -121,7 +121,7 @@ const Administration = () => {
             navigation={
                 <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
                     <Accordion openedItem={accordionOpenTab}>
-                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server size="big"/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
                             <TreeView data={dataServer}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
