@@ -127,7 +127,7 @@ const Administration = () => {
                                       defaultOpenedItems={treeSelected}
                                       onClickItem={elt => history.push(elt.route)}/>
                         </AccordionItem>
-                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb size="big"/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb/>}>
                             <TreeView data={dataSites}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
