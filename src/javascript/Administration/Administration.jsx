@@ -122,13 +122,15 @@ const Administration = () => {
                 <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
                     <Accordion openByDefault={accordionOpenTab}>
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
-                            <TreeView data={dataServer}
+                            <TreeView isReversed
+                                      data={dataServer}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
                                       onClickItem={elt => history.push(elt.route)}/>
                         </AccordionItem>
                         <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb/>}>
-                            <TreeView data={dataSites}
+                            <TreeView isReversed
+                                      data={dataSites}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
                                       onClickItem={elt => history.push(elt.route.replace(':siteKey', window.contextJsParameters.siteKey))}/>
