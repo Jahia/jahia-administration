@@ -19,7 +19,7 @@ const AdministrationGroup = () => {
         <PrimaryNavItem key={constants.DEFAULT_ROUTE}
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
-                        icon={<Setting size="big"/>}
+                        icon={<Setting/>}
                         onClick={() => history.push(`${constants.DEFAULT_ROUTE}`)}/>
     );
 };
@@ -162,4 +162,3 @@ export const registerAdministration = () => {
         render: () => <AdministrationGroup/>
     });
 };
-
