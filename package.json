@@ -27,7 +27,7 @@
     "@jahia/jahia-ui-root": "0.0.1"
   },
   "dependencies": {
-    "@jahia/moonstone": "^0.6.0",
+    "@jahia/moonstone": "^0.10.0",
     "@jahia/ui-extender": "^0.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",

@@ -120,7 +120,7 @@ const Administration = () => {
         <LayoutModule
             navigation={
                 <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
-                    <Accordion openByDefault={accordionOpenTab}>
+                    <Accordion openedItem={accordionOpenTab}>
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
                             <TreeView isReversed
                                       data={dataServer}
@@ -154,7 +154,7 @@ export const registerAdministration = () => {
     registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
     registry.add('adminRoute', 'administration-server', {
         omitFromTree: true,
-        targets: ['administration-server:ya999'],
+        targets: ['administration-server:999'],
         path: `${constants.DEFAULT_ROUTE}`,
         defaultPath: constants.DEFAULT_ROUTE,
         render: () => <AdministrationEmpty/>
@@ -164,4 +164,3 @@ export const registerAdministration = () => {
         render: () => <AdministrationGroup/>
     });
 };
-
