@@ -159,8 +159,8 @@ export const registerAdministration = () => {
         defaultPath: constants.DEFAULT_ROUTE,
         render: () => <AdministrationEmpty/>
     });
-    registry.add('bottomAdminGroup', 'administrationGroupItem', {
-        targets: ['nav-root-bottom:1'],
+    registry.add('primary-nav-item', 'administrationGroupItem', {
+        targets: ['nav-root-admin:1'],
         render: () => <AdministrationGroup/>
     });
 };
