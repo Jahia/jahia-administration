@@ -904,21 +904,22 @@
     eslint-plugin-react "^7.16.0"
     eslint-plugin-react-hooks "^2.2.0"
 
-"@jahia/moonstone@^0.9.0":
-  version "0.9.0"
-  resolved "https://npm.jahia.com/@jahia%2fmoonstone/-/moonstone-0.9.0.tgz#b5b1dc02e4a68f4dbc6e855f811cf34f955783f9"
-  integrity sha512-+LWgZFfvZyPDYOtuSiXQIDp481W6I1tiHeaWW/JuQi52nnzscEoIrogb9dpbYQg/o6D7UI/Rs155VqveL9OciQ==
+"@jahia/moonstone@^0.11.0":
+  version "0.11.1"
+  resolved "https://npm.jahia.com/@jahia%2fmoonstone/-/moonstone-0.11.1.tgz#000620e86dcc27328f9b758371df1c4e059d6513"
+  integrity sha512-5kU0/4OerJkGtXBH4h+cG3aJayxB8V10buKsGWE8rOY5+m6ChTx3ot2Qkp703bbrbPRAZw7z6cpxSxAfE7Y5FA==
   dependencies:
     "@svgr/webpack" "^4.3.3"
     clsx "^1.0.4"
     prop-types "^15.7.2"
     re-resizable "^6.1.0"
     react-is "^16.12.0"
+    to-px "^1.1.0"
 
-"@jahia/ui-extender@^0.1.1":
-  version "0.1.1"
-  resolved "https://npm.jahia.com/@jahia%2fui-extender/-/ui-extender-0.1.1.tgz#b42fd99950e9e913c5afcf5344bb49c6d2a133b2"
-  integrity sha512-XJ/dbuIXLOqzrqZ7Dwhnh5mW5r9+4juJD/AwfcX/1xrRYbJSkgP6WR5gGaOyoXoMjcHPIwW+jhPNvmJAPRXYzw==
+"@jahia/ui-extender@^0.3.2":
+  version "0.3.2"
+  resolved "https://npm.jahia.com/@jahia%2fui-extender/-/ui-extender-0.3.2.tgz#21740a762433d34b7fc3faf577ca64e021f5cc11"
+  integrity sha512-CKwN4yqqX1juRQShCNTl8H95iLVV1oxfhG0FGRwG/eAPo2KhA4Ss5Bge0azFnCcV+8zf2VsKY+artRwvnrUJPw==
   dependencies:
     lodash "^4.17.13"
     prop-types "^15.6.1"
@@ -6246,6 +6247,11 @@ parse-passwd@^1.0.0:
   resolved "https://registry.yarnpkg.com/parse-passwd/-/parse-passwd-1.0.0.tgz#6d5b934a456993b23d37f40a382d6f1666a8e5c6"
   integrity sha1-bVuTSkVpk7I9N/QKOC1vFmao5cY=
 
+parse-unit@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/parse-unit/-/parse-unit-1.0.1.tgz#7e1bb6d5bef3874c28e392526a2541170291eecf"
+  integrity sha1-fhu21b7zh0wo45JSaiVBFwKR7s8=
+
 parse5@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-4.0.0.tgz#6d78656e3da8d78b4ec0b906f7c08ef1dfe3f608"
@@ -7961,6 +7967,13 @@ to-object-path@^0.3.0:
   integrity sha1-KXWIt7Dn4KwI4E5nL4XB9JmeF68=
   dependencies:
     kind-of "^3.0.2"
+
+to-px@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/to-px/-/to-px-1.1.0.tgz#b6b269ed5db0cc9aefc15272a4c8bcb2ca1e99ca"
+  integrity sha512-bfg3GLYrGoEzrGoE05TAL/Uw+H/qrf2ptr9V3W7U0lkjjyYnIfgxmVLUfhQ1hZpIQwin81uxhDjvUkDYsC0xWw==
+  dependencies:
+    parse-unit "^1.0.1"
 
 to-regex-range@^2.1.0:
   version "2.1.1"
