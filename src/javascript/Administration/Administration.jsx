@@ -17,6 +17,7 @@ const AdministrationGroup = () => {
     const {t} = useTranslation('jahia-administration');
     return (
         <PrimaryNavItem key={constants.DEFAULT_ROUTE}
+                        role="administration-menu-item"
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
                         icon={<Setting/>}
