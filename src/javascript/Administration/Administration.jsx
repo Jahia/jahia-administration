@@ -11,10 +11,16 @@ import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
 import {loadNamespace} from './Administration.loadNamespace';
 import AdministrationEmpty from './Administration.empty';
+import {useNodeChecks} from '@jahia/data-helper';
 
 const AdministrationGroup = () => {
     const history = useHistory();
     const {t} = useTranslation('jahia-administration');
+    const permission = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: ['administrationAccess']});
+    if (permission.loading === true || permission.node.administrationAccess === false) {
+        return null;
+    }
+
     return (
         <PrimaryNavItem key={constants.DEFAULT_ROUTE}
                         role="administration-menu-item"
@@ -28,7 +34,42 @@ const AdministrationGroup = () => {
 const Administration = () => {
     const history = useHistory();
     const {t} = useTranslation();
+    let requiredPermission = ['administrationAccess'];
+    let buildRequiredPermissions = function (currentLevelRoute, registryTargetParent) {
+        currentLevelRoute.forEach(route => {
+            let permission = route.requiredPermission;
+            if (permission) {
+                if (Array.isArray(permission)) {
+                    requiredPermission = requiredPermission.concat(permission.filter(p => requiredPermission.indexOf(p) === -1));
+                } else if (requiredPermission.indexOf(permission) === -1) {
+                    requiredPermission.push(permission);
+                }
+            }
+
+            if (route.childrenTarget !== null) {
+                buildRequiredPermissions(registry.find({
+                    type: 'adminRoute',
+                    target: `${registryTargetParent}-${route.childrenTarget}`
+                }));
+            }
+        });
+    };
+
+    buildRequiredPermissions(registry.find({
+        type: 'adminRoute',
+        target: 'administration-server'
+    }), 'administration-server');
+
+    buildRequiredPermissions(registry.find({
+        type: 'adminRoute',
+        target: 'administration-server'
+    }), 'administration-sites');
+
+    const permissions = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: requiredPermission});
     const loadingNamespace = loadNamespace('jahia-administration');
+    if (permissions.loading === true || permissions.node.administrationAccess === false) {
+        return null;
+    }
 
     if (loadingNamespace) {
         return 'Loading screen';
@@ -41,6 +82,10 @@ const Administration = () => {
         currentLevelRoute.forEach(route => {
             if (route.omitFromTree) {
                 routes.push(route);
+                return;
+            }
+
+            if (route.requiredPermission !== undefined && permissions.node[route.requiredPermission] === false) {
                 return;
             }
 
@@ -122,14 +167,20 @@ const Administration = () => {
             navigation={
                 <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
                     <Accordion openedItem={accordionOpenTab}>
-                        <AccordionItem id={constants.ACCORDION_TABS.SERVER} label={t('jahia-administration:jahia-administration.server')} icon={<Server/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SERVER}
+                                       label={t('jahia-administration:jahia-administration.server')}
+                                       icon={<Server/>}
+                        >
                             <TreeView isReversed
                                       data={dataServer}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
                                       onClickItem={elt => history.push(elt.route)}/>
                         </AccordionItem>
-                        <AccordionItem id={constants.ACCORDION_TABS.SITE} label={t('jahia-administration:jahia-administration.sites')} icon={<SiteWeb/>}>
+                        <AccordionItem id={constants.ACCORDION_TABS.SITE}
+                                       label={t('jahia-administration:jahia-administration.sites')}
+                                       icon={<SiteWeb/>}
+                        >
                             <TreeView isReversed
                                       data={dataSites}
                                       selectedItems={treeSelected}
