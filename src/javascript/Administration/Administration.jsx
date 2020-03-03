@@ -165,8 +165,8 @@ const Administration = () => {
     return (
         <LayoutModule
             navigation={
-                <SecondaryNav header={<Typography variant="section">{t('jahia-administration:jahia-administration.label')}</Typography>}>
-                    <Accordion openedItem={accordionOpenTab}>
+                <SecondaryNav header={<Typography variant="heading" style={{padding: 20}}>{t('jahia-administration:jahia-administration.label')}</Typography>}>
+                    <Accordion defaultOpenedItem={accordionOpenTab}>
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER}
                                        label={t('jahia-administration:jahia-administration.server')}
                                        icon={<Server/>}
