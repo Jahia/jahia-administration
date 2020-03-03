@@ -1,8 +1,6 @@
 import React, {Suspense} from 'react';
 import PropTypes from 'prop-types';
-import {registry} from '@jahia/ui-extender';
-import AdministrationIframe from './iFrames/AdministrationIframe';
-import SiteIframe from './iFrames/SiteIframe';
+import {registry, IframeRenderer} from '@jahia/ui-extender';
 import constants from './Administration.constants';
 
 export const registerRoute = (componentToRender = 'Jahia Administration') => {
@@ -16,7 +14,6 @@ export const registerRoute = (componentToRender = 'Jahia Administration') => {
 
 export const registerRouteLv2 = (level = 'server', route = null, path = null, label = 'Default Label', icon = null, target = null, priority = 1, childrenTarget = null, isSelectable = true) => {
     let administrationServer = level === 'server' ? 'administration-server' : 'administration-sites';
-    let IframeComponent = level === 'server' ? AdministrationIframe : SiteIframe;
     let s = target === null ? administrationServer : `${administrationServer}-${target}`;
     let path1 = path === null ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
     registry.add('adminRoute', `${administrationServer}-${path.toLowerCase()}`, {
@@ -28,9 +25,9 @@ export const registerRouteLv2 = (level = 'server', route = null, path = null, la
         label: label,
         childrenTarget: childrenTarget,
         isSelectable: isSelectable,
-        render: () => (
+        render: props => (
             <Suspense fallback="loading ...">
-                {route && <IframeComponent route={route}/>}
+                {route && <RenderAdminRoute route={route} level={level} {...props}/>}
             </Suspense>
         ),
         level,
@@ -38,9 +35,8 @@ export const registerRouteLv2 = (level = 'server', route = null, path = null, la
     });
 };
 
-export const RenderIframe = props => {
+export const RenderAdminRoute = props => {
     console.log('Frame', props);
-    const IframeComponent = props.level === 'server' ? AdministrationIframe : SiteIframe;
 
     if (props.route === null) {
         return null;
@@ -51,17 +47,24 @@ export const RenderIframe = props => {
         return props.render();
     }
 
+    let url = `${window.contextJsParameters.contextPath}/cms/adminframe/default/$lang`;
+    if (props.level === 'server') {
+        url += `/settings.${props.route}.html?redirect=false`;
+    } else {
+        url += `/sites/$site-key.${props.route}.html`;
+    }
+
     return (
         <Suspense fallback="loading ...">
-            <IframeComponent route={props.route}/>
+            <IframeRenderer url={url}/>
         </Suspense>
     );
 };
 
-RenderIframe.propTypes = {
+RenderAdminRoute.propTypes = {
     route: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
-    render: PropTypes.func.isRequired
+    render: PropTypes.func
 };
 
 console.log('%c Jahia Administration is activated', 'color: #3c8cba');

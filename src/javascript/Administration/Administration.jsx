@@ -2,7 +2,7 @@ import React from 'react';
 import {registry} from '@jahia/ui-extender';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
-import {registerRoute, registerRouteLv2, RenderIframe} from './Administration.route';
+import {registerRoute, registerRouteLv2, RenderAdminRoute} from './Administration.route';
 import {useTranslation} from 'react-i18next';
 import Server from '@jahia/moonstone/dist/icons/Server';
 import Setting from '@jahia/moonstone/dist/icons/Setting';
@@ -193,7 +193,7 @@ const Administration = () => {
             content={
                 <Switch>
                     {routes.map(r =>
-                        <Route key={r.key} path={r.path} render={() => <RenderIframe {...r}/>}/>
+                        <Route key={r.key} path={r.path} render={() => <RenderAdminRoute {...r}/>}/>
                     )}
                 </Switch>
             }
