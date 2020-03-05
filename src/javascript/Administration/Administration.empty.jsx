@@ -39,7 +39,7 @@ const AdministrationEmpty = () => {
             <div style={styles.text}>
                 <Typography component="h2" variant="strong">{t('jahia-administration.label')}</Typography>
                 <Typography component="p">{t('jahia-administration.about')}</Typography>
-                <a style={styles.link} href={window.contextJsParameters.links.documentation} target="_blank" rel="noopener noreferrer">
+                <a style={styles.link} href={window.contextJsParameters.config.links.documentation} target="_blank" rel="noopener noreferrer">
                     {t('jahia-administration.learnmore')}
                     <ArrowRight/>
                 </a>
