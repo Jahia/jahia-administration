@@ -2,7 +2,7 @@ import React from 'react';
 import {registry} from '@jahia/ui-extender';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
-import {registerRoute, registerRouteLv2, RenderAdminRoute} from './Administration.route';
+import {registerRoute, RenderAdminRoute} from './Administration.route';
 import {useTranslation} from 'react-i18next';
 import Server from '@jahia/moonstone/dist/icons/Server';
 import Setting from '@jahia/moonstone/dist/icons/Setting';
@@ -12,12 +12,19 @@ import {Route, Switch} from 'react-router';
 import {loadNamespace} from './Administration.loadNamespace';
 import AdministrationEmpty from './Administration.empty';
 import {useNodeChecks} from '@jahia/data-helper';
+import {useSelector} from 'react-redux';
+import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 
 const AdministrationGroup = () => {
     const history = useHistory();
     const {t} = useTranslation('jahia-administration');
-    const permission = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: ['administrationAccess']});
-    if (permission.loading === true || permission.node.administrationAccess === false) {
+    const serverPermission = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: ['administrationAccess']});
+    const currentSite = useSelector(state => ({site: state.site}));
+    const sitePermission = useNodeChecks({
+        path: '/sites/' + currentSite.site,
+        language: 'en'
+    }, {requiredPermission: ['siteAdministrationAccess']});
+    if (serverPermission.loading === true || sitePermission.loading === true || (serverPermission.node.administrationAccess === false && sitePermission.node.siteAdministrationAccess === false)) {
         return null;
     }
 
@@ -34,23 +41,26 @@ const AdministrationGroup = () => {
 const Administration = () => {
     const history = useHistory();
     const {t} = useTranslation();
-    let requiredPermission = ['administrationAccess'];
-    let buildRequiredPermissions = function (currentLevelRoute, registryTargetParent) {
+    let serverRequiredPermission = ['administrationAccess'];
+    let siteRequiredPermission = ['siteAdministrationAccess'];
+    let buildRequiredPermissions = function (currentLevelRoute, registryTargetParent, permissionsArray) {
         currentLevelRoute.forEach(route => {
             let permission = route.requiredPermission;
             if (permission) {
                 if (Array.isArray(permission)) {
-                    requiredPermission = requiredPermission.concat(permission.filter(p => requiredPermission.indexOf(p) === -1));
-                } else if (requiredPermission.indexOf(permission) === -1) {
-                    requiredPermission.push(permission);
+                    permissionsArray = permissionsArray.concat(permission.filter(p => permissionsArray.indexOf(p) === -1));
+                } else if (permissionsArray.indexOf(permission) === -1) {
+                    permissionsArray.push(permission);
                 }
             }
 
-            if (route.childrenTarget !== null) {
-                buildRequiredPermissions(registry.find({
+            if (route.childrenTarget !== undefined && route.childrenTarget !== null) {
+                let target = `${registryTargetParent}-${route.childrenTarget}`;
+                let childrenRoutes = registry.find({
                     type: 'adminRoute',
-                    target: `${registryTargetParent}-${route.childrenTarget}`
-                }));
+                    target: target
+                });
+                buildRequiredPermissions(childrenRoutes, target, permissionsArray);
             }
         });
     };
@@ -58,16 +68,21 @@ const Administration = () => {
     buildRequiredPermissions(registry.find({
         type: 'adminRoute',
         target: 'administration-server'
-    }), 'administration-server');
-
+    }), 'administration-server', serverRequiredPermission);
     buildRequiredPermissions(registry.find({
         type: 'adminRoute',
-        target: 'administration-server'
-    }), 'administration-sites');
+        target: 'administration-sites'
+    }), 'administration-sites', siteRequiredPermission);
+    const currentSite = useSelector(state => ({site: state.site}));
+    const serverPermissions = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: serverRequiredPermission});
+    const sitePermissions = useNodeChecks({
+        path: '/sites/' + currentSite.site,
+        language: 'en'
+    }, {requiredPermission: siteRequiredPermission});
 
-    const permissions = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: requiredPermission});
     const loadingNamespace = loadNamespace('jahia-administration');
-    if (permissions.loading === true || permissions.node.administrationAccess === false) {
+    if (serverPermissions.loading === true || sitePermissions.loading === true ||
+        (serverPermissions.node.administrationAccess === false && sitePermissions.node.siteAdministrationAccess === false)) {
         return null;
     }
 
@@ -78,7 +93,7 @@ const Administration = () => {
     const routes = [];
     const dataServer = [];
     const dataSites = [];
-    let createTreeStructureAndAggregateRoutes = function (currentLevelRoute, parent, registryTargetParent) {
+    let createTreeStructureAndAggregateRoutes = function (currentLevelRoute, parent, registryTargetParent, permissions) {
         currentLevelRoute.forEach(route => {
             if (route.omitFromTree) {
                 routes.push(route);
@@ -99,11 +114,13 @@ const Administration = () => {
                 treeEntry.iconStart = route.icon;
             }
 
-            if (route.childrenTarget !== null) {
-                createTreeStructureAndAggregateRoutes(registry.find({
+            if (route.childrenTarget !== undefined && route.childrenTarget !== null) {
+                let target = `${registryTargetParent}-${route.childrenTarget}`;
+                let childrenRoutes = registry.find({
                     type: 'adminRoute',
-                    target: `${registryTargetParent}-${route.childrenTarget}`
-                }), treeEntry.children);
+                    target: target
+                });
+                createTreeStructureAndAggregateRoutes(childrenRoutes, treeEntry.children, target, permissions);
             }
 
             if (route.isSelectable) {
@@ -118,12 +135,12 @@ const Administration = () => {
     createTreeStructureAndAggregateRoutes(registry.find({
         type: 'adminRoute',
         target: 'administration-server'
-    }), dataServer, 'administration-server');
+    }), dataServer, 'administration-server', serverPermissions);
 
     createTreeStructureAndAggregateRoutes(registry.find({
         type: 'adminRoute',
         target: 'administration-sites'
-    }), dataSites, 'administration-sites');
+    }), dataSites, 'administration-sites', sitePermissions);
 
     let getSelectedItems = function () {
         let selectedItems = [];
@@ -144,7 +161,7 @@ const Administration = () => {
         return 'server';
     };
 
-    console.log('Tree', dataServer);
+    console.log('Routes', routes);
 
     const recursiveIdCheck = function (data, selectedItem) {
         return data.find(node => {
@@ -165,8 +182,15 @@ const Administration = () => {
     return (
         <LayoutModule
             navigation={
-                <SecondaryNav header={<Typography variant="heading" style={{padding: 20}}>{t('jahia-administration:jahia-administration.label')}</Typography>}>
+                <SecondaryNav header={
+                    <Typography variant="heading"
+                                style={{padding: 20}}
+                    >{t('jahia-administration:jahia-administration.label')}
+                    </Typography>
+                }
+                >
                     <Accordion defaultOpenedItem={accordionOpenTab}>
+                        {serverPermissions.node.administrationAccess &&
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER}
                                        label={t('jahia-administration:jahia-administration.server')}
                                        icon={<Server/>}
@@ -176,24 +200,26 @@ const Administration = () => {
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
                                       onClickItem={elt => history.push(elt.route)}/>
-                        </AccordionItem>
+                        </AccordionItem>}
+                        {sitePermissions.node.siteAdministrationAccess &&
                         <AccordionItem id={constants.ACCORDION_TABS.SITE}
                                        label={t('jahia-administration:jahia-administration.sites')}
                                        icon={<SiteWeb/>}
                         >
+                            <SiteSwitcher/>
                             <TreeView isReversed
                                       data={dataSites}
                                       selectedItems={treeSelected}
                                       defaultOpenedItems={treeSelected}
-                                      onClickItem={elt => history.push(elt.route.replace(':siteKey', window.contextJsParameters.siteKey))}/>
-                        </AccordionItem>
+                                      onClickItem={elt => history.push(elt.route.replace(':siteKey', currentSite.site))}/>
+                        </AccordionItem>}
                     </Accordion>
                 </SecondaryNav>
             }
             content={
                 <Switch>
                     {routes.map(r =>
-                        <Route key={r.key} path={r.path} render={() => <RenderAdminRoute {...r}/>}/>
+                        <Route key={r.key} exact strict path={r.path} render={() => <RenderAdminRoute {...r}/>}/>
                     )}
                 </Switch>
             }
@@ -203,13 +229,21 @@ const Administration = () => {
 
 export const registerAdministration = () => {
     registerRoute(<Administration/>);
-    registerRouteLv2('sites', 'manageModules', ':siteKey/manageModules', 'Modules', null);
     registry.add('adminRoute', 'administration-server', {
         omitFromTree: true,
         targets: ['administration-server:999'],
         path: `${constants.DEFAULT_ROUTE}`,
         defaultPath: constants.DEFAULT_ROUTE,
         render: () => <AdministrationEmpty/>
+    });
+    registry.add('adminRoute', 'administration-sites', {
+        omitFromTree: true,
+        targets: ['administration-sites:100'],
+        path: `${constants.DEFAULT_ROUTE}/:siteKey/settings`,
+        defaultPath: constants.DEFAULT_ROUTE,
+        render: () => {
+            return 'Test Site Settings';
+        }
     });
     registry.add('primary-nav-item', 'administrationGroupItem', {
         targets: ['nav-root-admin:1'],
