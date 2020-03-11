@@ -12,29 +12,6 @@ export const registerRoute = (componentToRender = 'Jahia Administration') => {
     });
 };
 
-export const registerRouteLv2 = (level = 'server', route = null, path = null, label = 'Default Label', icon = null, target = null, priority = 1, childrenTarget = null, isSelectable = true) => {
-    let administrationServer = level === 'server' ? 'administration-server' : 'administration-sites';
-    let s = target === null ? administrationServer : `${administrationServer}-${target}`;
-    let path1 = path === null ? constants.DEFAULT_ROUTE : `${constants.DEFAULT_ROUTE}/${path}`;
-    registry.add('adminRoute', `${administrationServer}-${path.toLowerCase()}`, {
-        id: route,
-        targets: [`${s}:${priority}`],
-        path: path1,
-        defaultPath: path1,
-        icon: icon,
-        label: label,
-        childrenTarget: childrenTarget,
-        isSelectable: isSelectable,
-        render: props => (
-            <Suspense fallback="loading ...">
-                {route && <RenderAdminRoute route={route} level={level} {...props}/>}
-            </Suspense>
-        ),
-        level,
-        route
-    });
-};
-
 export const RenderAdminRoute = props => {
     console.log('Frame', props);
 
