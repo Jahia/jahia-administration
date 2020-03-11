@@ -82,7 +82,7 @@ const Administration = () => {
 
     const loadingNamespace = loadNamespace('jahia-administration');
     if (serverPermissions.loading === true || sitePermissions.loading === true ||
-        (serverPermissions.node.administrationAccess === false && sitePermissions.node.siteAdministrationAccess)) {
+        (serverPermissions.node.administrationAccess === false && sitePermissions.node.siteAdministrationAccess === false)) {
         return null;
     }
 
