@@ -21,7 +21,6 @@ const SiteSwitcher = () => {
     function handleOnChange(e, item) {
         history.push(location.pathname.replace('/' + currentSite.site + '/', '/' + item.name + '/'));
         dispatch(registry.get('redux-reducer', 'site').actions.setSite(item.name));
-
     }
 
     const dropdown = (data && data.jcr.result.nodes) ? (
