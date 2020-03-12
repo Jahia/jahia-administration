@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {registry} from '@jahia/ui-extender';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, SecondaryNavHeader, TreeView} from '@jahia/moonstone';
@@ -12,7 +12,7 @@ import {Route, Switch} from 'react-router';
 import {loadNamespace} from './Administration.loadNamespace';
 import AdministrationEmpty from './Administration.empty';
 import {useNodeChecks} from '@jahia/data-helper';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 
 const AdministrationGroup = () => {
@@ -36,6 +36,26 @@ const AdministrationGroup = () => {
                         icon={<Setting/>}
                         onClick={() => history.push(`${constants.DEFAULT_ROUTE}`)}/>
     );
+};
+
+let currentSite;
+let dispatch;
+
+const administrationMessageListener = event => {
+    if (event.origin !== window.location.origin) {
+        return;
+    }
+
+    if (event.data !== null && event.data.msg !== null) {
+        if (event.data.msg === 'updatedSitesList') {
+            let sites = event.data.sites;
+            if (!sites.find(site => site === currentSite)) {
+                console.log('updatedSitesList msg received and current site not found in existing list, switching site in environmemnt' +
+                    ' to default site');
+                dispatch(registry.get('redux-reducer', 'site').actions.setSite((event.data.defaultSite === undefined ? 'systemsite' : event.data.defaultSite)));
+            }
+        }
+    }
 };
 
 const Administration = () => {
@@ -73,7 +93,8 @@ const Administration = () => {
         type: 'adminRoute',
         target: 'administration-sites'
     }), 'administration-sites', siteRequiredPermission);
-    const currentSite = useSelector(state => ({site: state.site}));
+    currentSite = useSelector(state => ({site: state.site}));
+    dispatch = useDispatch();
     const serverPermissions = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: serverRequiredPermission});
     const sitePermissions = useNodeChecks({
         path: '/sites/' + currentSite.site,
@@ -81,6 +102,14 @@ const Administration = () => {
     }, {requiredPermission: siteRequiredPermission});
 
     const loadingNamespace = loadNamespace('jahia-administration');
+    useEffect(() => {
+        window.addEventListener('message', administrationMessageListener, false);
+
+        return () => {
+            window.removeEventListener('message', administrationMessageListener, false);
+        };
+    });
+
     if (serverPermissions.loading === true || sitePermissions.loading === true ||
         (serverPermissions.node.administrationAccess === false && sitePermissions.node.siteAdministrationAccess === false)) {
         return null;
