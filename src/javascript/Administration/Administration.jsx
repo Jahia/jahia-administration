@@ -1,7 +1,7 @@
 import React from 'react';
 import {registry} from '@jahia/ui-extender';
 import {useHistory} from 'react-router-dom';
-import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, TreeView, Typography} from '@jahia/moonstone';
+import {Accordion, AccordionItem, LayoutModule, PrimaryNavItem, SecondaryNav, SecondaryNavHeader, TreeView} from '@jahia/moonstone';
 import {registerRoute, RenderAdminRoute} from './Administration.route';
 import {useTranslation} from 'react-i18next';
 import Server from '@jahia/moonstone/dist/icons/Server';
@@ -182,13 +182,7 @@ const Administration = () => {
     return (
         <LayoutModule
             navigation={
-                <SecondaryNav header={
-                    <Typography variant="heading"
-                                style={{padding: 20}}
-                    >{t('jahia-administration:jahia-administration.label')}
-                    </Typography>
-                }
-                >
+                <SecondaryNav header={<SecondaryNavHeader>{t('jahia-administration:jahia-administration.label')}</SecondaryNavHeader>}>
                     <Accordion defaultOpenedItem={accordionOpenTab}>
                         {serverPermissions.node.administrationAccess &&
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER}
