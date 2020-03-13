@@ -190,8 +190,6 @@ const Administration = () => {
         return 'server';
     };
 
-    console.log('Routes', routes, serverPermissions, sitePermissions);
-
     const recursiveIdCheck = function (data, selectedItem) {
         return data.find(node => {
             if (node.id === selectedItem) {
