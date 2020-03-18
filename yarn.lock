@@ -985,10 +985,10 @@
     react-is "^16.12.0"
     to-px "^1.1.0"
 
-"@jahia/ui-extender@^0.4.0":
-  version "0.4.0"
-  resolved "https://npm.jahia.com/@jahia%2fui-extender/-/ui-extender-0.4.0.tgz#fbec004b314e10d1e744539cf8a8cf625d573ccf"
-  integrity sha512-A1M7fvtJenUBKdDjM2u8cP3yQ7rOLj5YRe3G6Jw0Y+NhiI5mt76RIU9GbxENY+Gf6doPBiolImxrFFwu2AHWkw==
+"@jahia/ui-extender@^0.4.9":
+  version "0.4.9"
+  resolved "https://npm.jahia.com/@jahia%2fui-extender/-/ui-extender-0.4.9.tgz#6927cdf37aaacf93c6a52385d56be8e5525a6cc1"
+  integrity sha512-PtcIL2Kp4GLCzqWmaVj/xdpqnl6AFy4x5ceBJvsBkI3IwIgq2+NLYLc1/1Ge7s0v4HRS0kqWjC6LsOJ2QdrnrA==
   dependencies:
     prop-types "^15.6.1"
     react "^16.12.0"

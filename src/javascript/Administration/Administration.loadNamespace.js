@@ -10,10 +10,9 @@ export const loadNamespace = namespace => {
     useEffect(() => {
         i18n.loadNamespaces(namespace)
             .then(() => {
-                    console.log('ADM loaded namespace', namespace, i18n);
                     setLoading(false);
                 }
-            ).catch((e) => console.log('ADM error loading namespace', namespace, i18n, e));
+            ).catch((e) => console.error('ADM error loading namespace', namespace, i18n, e));
     }, [i18n, namespace]);
 
     return loading;
