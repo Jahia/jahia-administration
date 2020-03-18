@@ -11,19 +11,19 @@ import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
 import {loadNamespace} from './Administration.loadNamespace';
 import AdministrationEmpty from './Administration.empty';
-import {useNodeChecks} from '@jahia/data-helper';
+import {useNodeInfo} from '@jahia/data-helper';
 import {useDispatch, useSelector} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 
 const AdministrationGroup = () => {
     const history = useHistory();
     const {t} = useTranslation('jahia-administration');
-    const serverPermission = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: ['administrationAccess']});
+    const serverPermission = useNodeInfo({path: '/', language: 'en'}, {getPermissions: ['administrationAccess']});
     const currentSite = useSelector(state => ({site: state.site}));
-    const sitePermission = useNodeChecks({
+    const sitePermission = useNodeInfo({
         path: '/sites/' + currentSite.site,
         language: 'en'
-    }, {requiredPermission: ['siteAdministrationAccess']});
+    }, {getPermissions: ['siteAdministrationAccess']});
     if (serverPermission.loading === true || sitePermission.loading === true || (serverPermission.node.administrationAccess === false && sitePermission.node.siteAdministrationAccess === false)) {
         return null;
     }
@@ -95,11 +95,11 @@ const Administration = () => {
     }), 'administration-sites', siteRequiredPermission);
     currentSite = useSelector(state => ({site: state.site}));
     dispatch = useDispatch();
-    const serverPermissions = useNodeChecks({path: '/', language: 'en'}, {requiredPermission: serverRequiredPermission});
-    const sitePermissions = useNodeChecks({
+    const serverPermissions = useNodeInfo({path: '/', language: 'en'}, {getPermissions: serverRequiredPermission});
+    const sitePermissions = useNodeInfo({
         path: '/sites/' + currentSite.site,
         language: 'en'
-    }, {requiredPermission: siteRequiredPermission});
+    }, {getPermissions: siteRequiredPermission});
 
     const loadingNamespace = loadNamespace('jahia-administration');
     useEffect(() => {
@@ -190,8 +190,6 @@ const Administration = () => {
         return 'server';
     };
 
-    console.log('Routes', routes);
-
     const recursiveIdCheck = function (data, selectedItem) {
         return data.find(node => {
             if (node.id === selectedItem) {
@@ -241,8 +239,10 @@ const Administration = () => {
             }
             content={
                 <Switch>
-                    {routes.map(r =>
-                        <Route key={r.key} exact strict path={r.path} render={() => <RenderAdminRoute {...r}/>}/>
+                    {routes.filter(r => r.requiredPermission === undefined ||
+                        serverPermissions.node[r.requiredPermission] ||
+                        sitePermissions.node[r.requiredPermission]).map(r =>
+                            <Route key={r.key} exact strict path={r.path} render={() => <RenderAdminRoute {...r}/>}/>
                     )}
                 </Switch>
             }
