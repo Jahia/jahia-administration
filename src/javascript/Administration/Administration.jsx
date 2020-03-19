@@ -103,7 +103,7 @@ const Administration = ({match}) => {
     const {site, serverSelectedItem, siteSelectedItem} = getSelectedItem(param);
 
     useEffect(() => {
-        if (site !== currentSite) {
+        if (site !== undefined && site !== currentSite) {
             dispatch(registry.get('redux-reducer', 'site').actions.setSite(site));
         }
 
