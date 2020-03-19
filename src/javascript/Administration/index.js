@@ -1,3 +1,3 @@
-import {registerAdministration} from './Administration';
+import {registerAdministration} from './register';
 
 registerAdministration();
