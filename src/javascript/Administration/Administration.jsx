@@ -12,6 +12,7 @@ import {useNodeInfo} from '@jahia/data-helper';
 import {useDispatch, useSelector} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 import PropTypes from 'prop-types';
+import AdministrationEmpty from "./Administration.empty";
 
 let currentSite;
 let dispatch;
@@ -135,7 +136,7 @@ const Administration = ({match}) => {
         return 'Loading screen';
     }
 
-    const accordionOpenTab = siteSelectedItem ? constants.ACCORDION_TABS.SITE : constants.ACCORDION_TABS.SERVER;
+    const accordionOpenTab = siteSelectedItem || !serverResult.allowed ? constants.ACCORDION_TABS.SITE : constants.ACCORDION_TABS.SERVER;
     return (
         <LayoutModule
             navigation={
@@ -169,12 +170,13 @@ const Administration = ({match}) => {
             }
             content={
                 <Switch>
-                    {serverResult.filteredRoutes.map(r =>
+                    {serverResult.allowed && serverResult.filteredRoutes.map(r =>
                         <Route key={r.key} exact strict path={'/administration/' + r.key} render={props => r.render(props)}/>
                     )}
-                    {sitesResult.filteredRoutes.map(r =>
+                    {sitesResult.allowed && sitesResult.filteredRoutes.map(r =>
                         <Route key={r.key} exact strict path={'/administration/:site/' + r.key} render={props => r.render(props)}/>
                     )}
+                    <Route exact strict path={'/administration'} component={AdministrationEmpty}/>
                 </Switch>
             }
         />
