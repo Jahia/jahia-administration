@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 import PropTypes from 'prop-types';
 import AdministrationEmpty from './Administration.empty';
+import {adminSetSites} from './Administration.redux';
 
 let currentSite;
 let dispatch;
@@ -29,7 +30,7 @@ const administrationMessageListener = event => {
                 dispatch(registry.get('redux-reducer', 'site').actions.setSite((event.data.defaultSite === undefined ? 'systemsite' : event.data.defaultSite)));
             }
 
-            dispatch(registry.get('redux-reducer', 'administration').actions.adminSetSites(event.data.sites));
+            dispatch(adminSetSites(event.data.sites));
         }
     }
 };
