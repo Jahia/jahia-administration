@@ -31,7 +31,6 @@ export const administrationRedux = () => {
 
     registry.add('redux-reducer', 'administration', {
         targets: ['root'],
-        reducer: combineReducers({path: pathReducer, sites: sitesReducer}),
-        actions: {adminSetSites}
+        reducer: combineReducers({path: pathReducer, sites: sitesReducer})
     });
 };
