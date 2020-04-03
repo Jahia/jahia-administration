@@ -1,5 +1,4 @@
 import {createActions, handleActions} from 'redux-actions';
-import {batch} from 'react-redux';
 import {registry} from '@jahia/ui-extender';
 import {combineReducers} from 'redux';
 
@@ -18,42 +17,13 @@ const extractParamsFromUrl = pathname => {
     return {path: ''};
 };
 
-const select = state => {
-    let {router: {location: {pathname}}, administration: {path}} = state;
-    return {
-        pathname,
-        path
-    };
-};
-
-let currentValue;
-let getSyncListener = store => () => {
-    setTimeout(() => {
-        let previousValue = currentValue || {};
-        currentValue = select(store.getState());
-        if (currentValue.pathname.startsWith('/administration/') && previousValue.pathname !== undefined && previousValue.pathname.startsWith('/administration/')) {
-            let currentValueFromUrl = extractParamsFromUrl(currentValue.pathname);
-            if (previousValue.pathname !== currentValue.pathname) {
-                let data = {};
-                Object.assign(data,
-                    currentValueFromUrl.path === previousValue.path ? {} : {path: currentValueFromUrl.path}
-                );
-                store.dispatch(dispatch => batch(() => {
-                    if (data.path) {
-                        dispatch(adminSetPath(data.path));
-                    }
-                }));
-            }
-        }
-    });
-};
-
 export const administrationRedux = () => {
     const jahiaCtx = window.contextJsParameters;
     const pathName = window.location.pathname.substring((jahiaCtx.contextPath + jahiaCtx.urlbase).length);
     const currentValueFromUrl = extractParamsFromUrl(pathName);
     const pathReducer = handleActions({
-        [adminSetPath]: (state, action) => action.payload
+        [adminSetPath]: (state, action) => action.payload,
+        '@@router/LOCATION_CHANGE': (state, action) => action.payload.location.pathname.startsWith('/administration') ? extractParamsFromUrl(action.payload.location.pathname).path : state
     }, currentValueFromUrl.path);
     const sitesReducer = handleActions({
         [adminSetSites]: (state, action) => action.payload
@@ -64,5 +34,4 @@ export const administrationRedux = () => {
         reducer: combineReducers({path: pathReducer, sites: sitesReducer}),
         actions: {adminSetSites}
     });
-    registry.add('redux-listener', 'administration', {targets: ['root'], createListener: getSyncListener});
 };
