@@ -11,13 +11,18 @@ const AdministrationGroup = () => {
     const history = useHistory();
     const {t} = useTranslation('jahia-administration');
     const serverPermission = useNodeInfo({path: '/', language: 'en'}, {getPermissions: ['administrationAccess']});
-    const currentSite = useSelector(state => ({site: state.site}));
+    const current = useSelector(state => ({site: state.site, lastVisitedPath: state.administration.path}));
     const sitePermission = useNodeInfo({
-        path: '/sites/' + currentSite.site,
+        path: '/sites/' + current.site,
         language: 'en'
     }, {getPermissions: ['siteAdministrationAccess']});
     if (serverPermission.loading === true || sitePermission.loading === true || (serverPermission.node.administrationAccess === false && sitePermission.node.siteAdministrationAccess === false)) {
         return null;
+    }
+
+    let route = constants.DEFAULT_ROUTE;
+    if (current.lastVisitedPath !== undefined && (current.lastVisitedPath.split('/').length === 3 || current.lastVisitedPath.indexOf(current.site) >= 0)) {
+        route = current.lastVisitedPath;
     }
 
     return (
@@ -26,7 +31,7 @@ const AdministrationGroup = () => {
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
                         icon={<Setting/>}
-                        onClick={() => history.push(`${constants.DEFAULT_ROUTE}`)}/>
+                        onClick={() => history.push(route)}/>
     );
 };
 
