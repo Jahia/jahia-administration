@@ -144,7 +144,7 @@ const Administration = ({match}) => {
         <LayoutModule
             navigation={
                 <SecondaryNav header={<SecondaryNavHeader>{t('jahia-administration:jahia-administration.label')}</SecondaryNavHeader>}>
-                    <Accordion defaultOpenedItem={accordionOpenTab}>
+                    <Accordion isReversed defaultOpenedItem={accordionOpenTab}>
                         {serverResult.allowed &&
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER}
                                        label={t('jahia-administration:jahia-administration.server')}
