@@ -6,7 +6,7 @@ import React, {Suspense} from 'react';
 
 export const registerAdministration = () => {
     registry.add('route', 'route-administration', {
-        targets: ['nav-root-top:1'],
+        targets: ['main:1'],
         path: `${constants.DEFAULT_ROUTE}*`, // Catch everything administration and let the app handle routing logic
         defaultPath: constants.DEFAULT_ROUTE,
         render: v => <Suspense fallback="loading ..."><Administration match={v.match}/></Suspense>
