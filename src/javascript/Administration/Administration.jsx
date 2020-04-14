@@ -157,7 +157,12 @@ const Administration = ({match}) => {
                                       data={serverResult.data}
                                       selectedItems={serverSelectedItem ? [serverSelectedItem] : []}
                                       defaultOpenedItems={serverResult.defaultOpenedItems}
-                                      onClickItem={elt => elt.isSelectable && history.push('/administration/' + elt.id)}/>
+                                      onClickItem={
+                                          (elt, event, toggleNode) => (
+                                              elt.isSelectable ?
+                                                  history.push('/administration/' + elt.id) :
+                                                  toggleNode(event))
+                                      }/>
                         </AccordionItem>}
                         {sitesResult.allowed &&
                         <AccordionItem id={constants.ACCORDION_TABS.SITE}
@@ -169,7 +174,12 @@ const Administration = ({match}) => {
                                       data={sitesResult.data}
                                       selectedItems={siteSelectedItem ? [siteSelectedItem] : []}
                                       defaultOpenedItems={sitesResult.defaultOpenedItems}
-                                      onClickItem={elt => elt.isSelectable && history.push('/administration/' + currentSite + '/' + elt.id)}/>
+                                      onClickItem={
+                                          (elt, event, toggleNode) => (
+                                              elt.isSelectable ?
+                                                  history.push('/administration/' + currentSite + '/' + elt.id) :
+                                                  toggleNode(event))
+                                      }/>
                         </AccordionItem>}
                     </Accordion>
                 </SecondaryNav>
