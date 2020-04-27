@@ -38,7 +38,7 @@ const SiteSwitcher = () => {
     // + 1 for system sites as it is not in the list of knownSites
     if ((current.knownSitesList.length > 0) && ((current.knownSitesList.length + 1) !== data.jcr.result.nodes.length)) {
         refetch({
-            displayLanguage: 'en'
+            displayLanguage: current.uilang
         });
     }
 
