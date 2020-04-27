@@ -9,6 +9,9 @@ const SitesQuery = gql`
                     displayName(language: $displayLanguage)
                     hasPermission(permissionName: "siteAdministrationAccess")
                     path
+                    defaultLanguage:property(name:"j:defaultLanguage"){
+                        value
+                    }
                 }
             }
         }
