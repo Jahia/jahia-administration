@@ -12,6 +12,9 @@ const SitesQuery = gql`
                     defaultLanguage:property(name:"j:defaultLanguage"){
                         value
                     }
+                    languages:property(name:"j:languages"){
+                        values
+                    }
                 }
             }
         }

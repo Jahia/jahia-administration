@@ -9,13 +9,12 @@ import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
 import {loadNamespace} from './Administration.loadNamespace';
 import {useNodeInfo} from '@jahia/data-helper';
-import {useDispatch, useSelector} from 'react-redux';
+import {batch, useDispatch, useSelector} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 import PropTypes from 'prop-types';
 import AdministrationEmpty from './Administration.empty';
-import {adminSetSites} from './Administration.redux';
 
-let currentSite;
+let current;
 let dispatch;
 
 const administrationMessageListener = event => {
@@ -26,11 +25,9 @@ const administrationMessageListener = event => {
     if (event.data !== null && event.data.msg !== null) {
         if (event.data.msg === 'updatedSitesList') {
             let sites = event.data.sites;
-            if (!sites.find(site => site === currentSite)) {
+            if (!sites.find(site => site === current.site)) {
                 dispatch(registry.get('redux-reducer', 'site').actions.setSite((event.data.defaultSite === undefined ? 'systemsite' : event.data.defaultSite)));
             }
-
-            dispatch(adminSetSites(event.data.sites));
         }
     }
 };
@@ -42,7 +39,8 @@ const useTree = ({target, nodePath, mainPermission, selectedItem}) => {
         path: nodePath
     }, {
         getPermissions: [mainPermission, ...allPermissions],
-        getSiteInstalledModules: true
+        getSiteInstalledModules: true,
+        getSiteLanguages: true
     });
 
     if (loading || error) {
@@ -77,7 +75,9 @@ const useTree = ({target, nodePath, mainPermission, selectedItem}) => {
         allowed: true,
         data,
         defaultOpenedItems,
-        filteredRoutes
+        filteredRoutes,
+        defaultLanguage: (node.site === undefined ? undefined : node.site.defaultLanguage),
+        languages: (node.site === undefined ? undefined : node.site.languages.map(item => item.language))
     };
 };
 
@@ -101,25 +101,16 @@ const Administration = ({match}) => {
     const {t} = useTranslation();
     const history = useHistory();
 
-    currentSite = useSelector(state => state.site);
+    current = useSelector(state => ({
+        site: state.site,
+        language: state.language
+    }));
     dispatch = useDispatch();
 
     const loadingNamespace = loadNamespace('jahia-administration');
 
     let param = match.params[0];
     const {site, serverSelectedItem, siteSelectedItem} = getSelectedItem(param);
-
-    useEffect(() => {
-        if (site !== undefined && site !== currentSite) {
-            dispatch(registry.get('redux-reducer', 'site').actions.setSite(site));
-        }
-
-        window.addEventListener('message', administrationMessageListener, false);
-
-        return () => {
-            window.removeEventListener('message', administrationMessageListener, false);
-        };
-    });
 
     const serverResult = useTree({
         target: 'administration-server',
@@ -131,7 +122,25 @@ const Administration = ({match}) => {
         target: 'administration-sites',
         mainPermission: 'siteAdministrationAccess',
         selectedItem: siteSelectedItem,
-        nodePath: '/sites/' + currentSite
+        nodePath: '/sites/' + current.site
+    });
+
+    useEffect(() => {
+        batch(() => {
+            if (site !== undefined && site !== current.site) {
+                dispatch(registry.get('redux-reducer', 'site').actions.setSite(site));
+            }
+
+            if (sitesResult.languages !== undefined && sitesResult.languages.indexOf(current.language) < 0) {
+                dispatch(registry.get('redux-reducer', 'language').actions.setLanguage(sitesResult.defaultLanguage));
+            }
+        });
+
+        window.addEventListener('message', administrationMessageListener, false);
+
+        return () => {
+            window.removeEventListener('message', administrationMessageListener, false);
+        };
     });
 
     if (serverResult.loading || sitesResult.loading || serverResult.error || sitesResult.error || (!serverResult.allowed && !sitesResult.allowed)) {
@@ -177,7 +186,7 @@ const Administration = ({match}) => {
                                       onClickItem={
                                           (elt, event, toggleNode) => (
                                               elt.isSelectable ?
-                                                  history.push('/administration/' + currentSite + '/' + elt.id) :
+                                                  history.push('/administration/' + current.site + '/' + elt.id) :
                                                   toggleNode(event))
                                       }/>
                         </AccordionItem>}

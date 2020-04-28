@@ -10,36 +10,32 @@ import {useHistory, useLocation} from 'react-router-dom';
 const SiteSwitcher = () => {
     const current = useSelector(state => ({
         site: state.site,
-        knownSitesList: state.administration.sites,
         uilang: state.uilang,
         language: state.language
     }));
-    const {loading, refetch, data} = useQuery(SitesQuery, {
+    const {loading, data} = useQuery(SitesQuery, {
         variables: {
             displayLanguage: current.uilang
-        }
+        },
+        fetchPolicy: 'network-only'
     });
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
 
     function handleOnChange(e, item) {
-        history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
+        if (location.pathname.indexOf('/' + current.site + '/') >= 0) {
+            history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
+        }
+
         dispatch(registry.get('redux-reducer', 'site').actions.setSite(item.name));
-        if (item.defaultLanguage !== current.language) {
+        if (item.languages.indexOf(current.language) < 0) {
             dispatch(registry.get('redux-reducer', 'language').actions.setLanguage(item.defaultLanguage));
         }
     }
 
     if (loading) {
         return null;
-    }
-
-    // + 1 for system sites as it is not in the list of knownSites
-    if ((current.knownSitesList.length > 0) && ((current.knownSitesList.length + 1) !== data.jcr.result.nodes.length)) {
-        refetch({
-            displayLanguage: current.uilang
-        });
     }
 
     const dropdown = (loading) ? null : (
@@ -49,7 +45,13 @@ const SiteSwitcher = () => {
             className={styles.siteSwitcher}
             data={data.jcr.result.nodes.filter(s => {
                 return s.hasPermission;
-            }).sort().map(s => ({label: s.displayName, value: s.path, name: s.name, defaultLanguage: s.defaultLanguage.value}))}
+            }).sort().map(s => ({
+                label: s.displayName,
+                value: s.path,
+                name: s.name,
+                defaultLanguage: s.defaultLanguage.value,
+                languages: s.languages.values
+            }))}
             onChange={(e, item) => handleOnChange(e, item)}
         />
     );
