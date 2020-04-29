@@ -7,7 +7,6 @@ import Server from '@jahia/moonstone/dist/icons/Server';
 import SiteWeb from '@jahia/moonstone/dist/icons/SiteWeb';
 import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
-import {loadNamespace} from './Administration.loadNamespace';
 import {useNodeInfo} from '@jahia/data-helper';
 import {batch, useDispatch, useSelector} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
@@ -107,8 +106,6 @@ const Administration = ({match}) => {
     }));
     dispatch = useDispatch();
 
-    const loadingNamespace = loadNamespace('jahia-administration');
-
     let param = match.params[0];
     const {site, serverSelectedItem, siteSelectedItem} = getSelectedItem(param);
 
@@ -145,10 +142,6 @@ const Administration = ({match}) => {
 
     if (serverResult.loading || sitesResult.loading || serverResult.error || sitesResult.error || (!serverResult.allowed && !sitesResult.allowed)) {
         return null;
-    }
-
-    if (loadingNamespace) {
-        return 'Loading screen';
     }
 
     const accordionOpenTab = siteSelectedItem || !serverResult.allowed ? constants.ACCORDION_TABS.SITE : constants.ACCORDION_TABS.SERVER;
