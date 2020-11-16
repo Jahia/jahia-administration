@@ -85,8 +85,9 @@ function getSelectedItem(param) {
     let item = param.substr(1);
     if (registry.get('adminRoute', item)) {
         while (registry.get('adminRoute', item).routeOnly && item.indexOf('/') > 0) {
-            item = item.substr(0, item.lastIndexOf('/'))
+            item = item.substr(0, item.lastIndexOf('/'));
         }
+
         return {serverSelectedItem: item};
     }
 
@@ -95,8 +96,9 @@ function getSelectedItem(param) {
     item = spl.slice(1).join('/');
     if (registry.get('adminRoute', item)) {
         while (registry.get('adminRoute', item).routeOnly && item.indexOf('/') > 0) {
-            item = item.substr(0, item.lastIndexOf('/'))
+            item = item.substr(0, item.lastIndexOf('/'));
         }
+
         return {site, siteSelectedItem: item};
     }
 
