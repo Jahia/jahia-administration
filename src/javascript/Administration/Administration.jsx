@@ -55,6 +55,7 @@ const useTree = ({target, nodePath, mainPermission, selectedItem}) => {
     const data = tree
         .filter(route => route.requiredPermission === undefined || node[route.requiredPermission] !== false)
         .filter(route => route.requireModuleInstalledOnSite === undefined || node.site.installedModulesWithAllDependencies.indexOf(route.requireModuleInstalledOnSite) > -1)
+        .filter(route => !route.routeOnly)
         .map(route => ({
             id: route.key,
             label: t(route.label),
@@ -83,6 +84,9 @@ const useTree = ({target, nodePath, mainPermission, selectedItem}) => {
 function getSelectedItem(param) {
     let item = param.substr(1);
     if (registry.get('adminRoute', item)) {
+        while (registry.get('adminRoute', item).routeOnly && item.indexOf('/') > 0) {
+            item = item.substr(0, item.lastIndexOf('/'))
+        }
         return {serverSelectedItem: item};
     }
 
@@ -90,6 +94,9 @@ function getSelectedItem(param) {
     let site = spl[0];
     item = spl.slice(1).join('/');
     if (registry.get('adminRoute', item)) {
+        while (registry.get('adminRoute', item).routeOnly && item.indexOf('/') > 0) {
+            item = item.substr(0, item.lastIndexOf('/'))
+        }
         return {site, siteSelectedItem: item};
     }
 
