@@ -46,7 +46,7 @@ const useTree = ({target, nodePath, mainPermission, selectedItem}) => {
         return {loading, error};
     }
 
-    if (!node[mainPermission]) {
+    if (!node || !node[mainPermission]) {
         return {
             allowed: false
         };
