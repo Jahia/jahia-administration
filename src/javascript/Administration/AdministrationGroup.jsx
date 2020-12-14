@@ -16,7 +16,7 @@ const AdministrationGroup = () => {
         path: '/sites/' + current.site,
         language: 'en'
     }, {getPermissions: ['siteAdministrationAccess']});
-    if (serverPermission.loading === true || sitePermission.loading === true || (serverPermission.node.administrationAccess === false && sitePermission.node.siteAdministrationAccess === false)) {
+    if (serverPermission.loading === true || sitePermission.loading === true || (serverPermission.node?.administrationAccess === false && sitePermission.node?.siteAdministrationAccess === false)) {
         return null;
     }
 
