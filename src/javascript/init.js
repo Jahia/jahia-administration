@@ -3,7 +3,7 @@ import register from './Administration.register';
 
 export default function () {
     registry.add('callback', 'jahiaAdministration', {
-        targets: ['jahiaApp-init:1'],
+        targets: ['jahiaApp-init:2'],
         callback: register
     });
 }
