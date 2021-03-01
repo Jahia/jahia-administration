@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
-import {registry, useAdminRouteTreeStructure} from '@jahia/ui-extender';
+import {registry} from '@jahia/ui-extender';
+import {useAdminRouteTreeStructure} from '@jahia/jahia-ui-root';
 import {useHistory} from 'react-router-dom';
 import {Accordion, AccordionItem, LayoutModule, SecondaryNav, SecondaryNavHeader, TreeView} from '@jahia/moonstone';
 import {useTranslation} from 'react-i18next';
