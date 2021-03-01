@@ -1,5 +1,3 @@
-import {registerAdministration} from './register';
-import {administrationRedux} from './Administration.redux';
+import Administration from './Administration';
 
-administrationRedux();
-registerAdministration();
+export default Administration;

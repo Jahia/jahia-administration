@@ -4,7 +4,7 @@ import Administration from './Administration';
 import AdministrationGroup from './AdministrationGroup';
 import React, {Suspense} from 'react';
 
-export const registerAdministration = () => {
+export const administrationRoutes = () => {
     registry.add('route', 'route-administration', {
         targets: ['main:1'],
         path: `${constants.DEFAULT_ROUTE}*`, // Catch everything administration and let the app handle routing logic
