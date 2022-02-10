@@ -65,7 +65,7 @@
     "eslint-loader": "^3.0.2",
     "eslint-plugin-json": "^2.0.1",
     "husky": "^3.0.9",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "path": "^0.12.7",
     "puppeteer": "^2.0.0",
     "puppeteer-edge": "^0.12.4",
