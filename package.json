@@ -29,7 +29,10 @@
   "jahia": {
     "remotes": {
       "jahia": "javascript/apps/remoteEntry.js"
-    }
+    },
+    "urlPatterns" : [
+      "/(?<appName>\\S*?)/administration/(?<siteKey>\\S*?)/settings/(?<settingName>\\S*)"
+    ]
   },
   "dependencies": {
     "@jahia/data-helper": "^1.0.0",
