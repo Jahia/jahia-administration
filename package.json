@@ -29,6 +29,9 @@
   "jahia": {
     "remotes": {
       "jahia": "javascript/apps/remoteEntry.js"
+    },
+    "urlPatterns" : {
+      "jahia": "/administration/(?<siteKey>\\S*?)/settings/(?<settingName>\\S*)"
     }
   },
   "dependencies": {
