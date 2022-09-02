@@ -6,8 +6,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {registry} from '@jahia/ui-extender';
 import styles from './SiteSwitcher.scss';
 import {useHistory, useLocation} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const SiteSwitcher = () => {
+const SiteSwitcher = ({selectedItem, availableRoutes}) => {
     const current = useSelector(state => ({
         site: state.site,
         uilang: state.uilang,
@@ -23,22 +24,54 @@ const SiteSwitcher = () => {
     const history = useHistory();
     const location = useLocation();
 
-    function handleOnChange(e, item) {
-        if (location.pathname.indexOf('/' + current.site + '/') >= 0) {
-            history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
-        }
+    const fetchRoute = (route, targetSite) => {
+        return fetch(route.iframeUrl.replace('/editframe/', '/render/').replace('$site-key', targetSite)
+            .replace('$lang', current.language)
+            .replace('$ui-lang', current.uiLang));
+    };
 
+    const redirectToFirstAccessibleUrl = (index, routes, item) => {
+        if (index >= routes.length) {
+            history.push('/administration/');
+            callDispatch(item);
+        } else {
+            const route = routes[index];
+            fetchRoute(route, item.name).then(result => {
+                if (result.ok) {
+                    history.push('/administration/' + item.name + '/' + route.key);
+                    callDispatch(item);
+                } else {
+                    redirectToFirstAccessibleUrl(index + 1, routes, item);
+                }
+            });
+        }
+    };
+
+    const handleOnChange = item => {
+        if (location.pathname.indexOf('/' + current.site + '/') >= 0) {
+            const urlToFetch = availableRoutes.find(route => route.key === selectedItem).iframeUrl.replace('editframe', 'render').replace('$site-key', item.name)
+                .replace('$lang', current.language)
+                .replace('$ui-lang', current.uiLang);
+            fetch(urlToFetch).then(result => {
+                if (result.ok) {
+                    history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
+                } else {
+                    redirectToFirstAccessibleUrl(0, availableRoutes, item);
+                }
+
+                callDispatch(item);
+            });
+        }
+    };
+
+    const callDispatch = item => {
         dispatch(registry.get('redux-reducer', 'site').actions.setSite(item.name));
         if (item.languages.indexOf(current.language) < 0) {
             dispatch(registry.get('redux-reducer', 'language').actions.setLanguage(item.defaultLanguage));
         }
-    }
+    };
 
-    if (loading) {
-        return null;
-    }
-
-    const dropdown = (loading) ? null : (
+    return (loading) ? null : (
         <Dropdown
             label={data.jcr.result.nodes.find(site => site.name === current.site).displayName}
             value={current.site}
@@ -52,10 +85,13 @@ const SiteSwitcher = () => {
                 defaultLanguage: s.defaultLanguage.value,
                 languages: s.languages.values
             }))}
-            onChange={(e, item) => handleOnChange(e, item)}
+            onChange={(_e, item) => handleOnChange(item)}
         />
     );
-    return dropdown;
 };
 
+SiteSwitcher.propTypes = {
+    availableRoutes: PropTypes.array.isRequired,
+    selectedItem: PropTypes.string.isRequired
+};
 export default SiteSwitcher;
