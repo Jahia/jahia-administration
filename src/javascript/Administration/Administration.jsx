@@ -181,7 +181,7 @@ const Administration = ({match}) => {
                                        label={t('jahia-administration:jahia-administration.sites')}
                                        icon={<SiteWeb/>}
                         >
-                            <SiteSwitcher/>
+                            <SiteSwitcher selectedItem={siteSelectedItem} availableRoutes={sitesResult.filteredRoutes}/>
                             <TreeView isReversed
                                       data={sitesResult.data}
                                       selectedItems={siteSelectedItem ? [siteSelectedItem] : []}
