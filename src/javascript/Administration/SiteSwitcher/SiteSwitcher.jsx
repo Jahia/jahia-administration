@@ -55,12 +55,13 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
             fetch(urlToFetch).then(result => {
                 if (result.ok) {
                     history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
+                    callDispatch(item);
                 } else {
                     redirectToFirstAccessibleUrl(0, availableRoutes, item);
                 }
-
-                callDispatch(item);
             });
+        } else {
+            callDispatch(item);
         }
     };
 
