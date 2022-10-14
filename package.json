@@ -1,11 +1,6 @@
 {
   "name": "@jahia/jahia-administration",
   "version": "0.0.1",
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn lint:fix"
-    }
-  },
   "scripts": {
     "test": "env-cmd --no-override jest",
     "testcli": "jest",
@@ -30,7 +25,7 @@
     "remotes": {
       "jahia": "javascript/apps/remoteEntry.js"
     },
-    "urlPatterns" : {
+    "urlPatterns": {
       "jahia": "/administration/(?<siteKey>\\S*?)/settings/(?<settingName>\\S*)"
     }
   },
@@ -67,17 +62,13 @@
     "eslint": "^6.8.0",
     "eslint-loader": "^3.0.2",
     "eslint-plugin-json": "^2.0.1",
-    "husky": "^3.0.9",
-    "node-sass": "^6.0.1",
     "path": "^0.12.7",
-    "puppeteer": "^2.0.0",
-    "puppeteer-edge": "^0.12.4",
-    "puppeteer-firefox": "^0.5.0",
     "rimraf": "^3.0.0",
+    "sass": "^1.55.0",
     "sass-loader": "^12.1.0",
     "style-loader": "^1.0.0",
     "webpack": "^5.24.2",
-    "webpack-bundle-analyzer": "^3.5.2",
+    "webpack-bundle-analyzer": "^4.6.1",
     "webpack-cli": "^4.5.0"
   }
 }
