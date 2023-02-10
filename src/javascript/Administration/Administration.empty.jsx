@@ -1,7 +1,7 @@
 import React from 'react';
 import {Typography} from '@jahia/moonstone';
-import Settings from '@jahia/moonstone/dist/icons/Setting';
-import ArrowRight from '@jahia/moonstone/dist/icons/ArrowRight';
+import {Setting} from '@jahia/moonstone';
+import {ArrowRight} from '@jahia/moonstone';
 import {useTranslation} from 'react-i18next';
 
 const styles = {
@@ -34,7 +34,7 @@ const AdministrationEmpty = () => {
     return (
         <div style={styles.container}>
             <div style={styles.icon}>
-                <Settings/>
+                <Setting/>
             </div>
             <div style={styles.text}>
                 <Typography component="h2" variant="strong">{t('jahia-administration.label')}</Typography>
