@@ -2,4 +2,10 @@
     flex: 1;
 
     text-transform: capitalize;
+
+    [role="listbox"] input,
+    [role="listbox"] svg {
+        /* Reset .moonstone-reversed color scheme on dropdown search input */
+        color: initial;
+    }
 }
