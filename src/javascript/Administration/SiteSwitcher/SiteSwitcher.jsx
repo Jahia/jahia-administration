@@ -72,14 +72,16 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
         }
     };
 
+    let siteNodes = data?.jcr.result?.nodes || [];
+    let sites = siteNodes.filter(s => s.hasPermission && s.name !== 'systemsite');
+    sites.push(siteNodes.find(s => s.name === 'systemsite')); // Add systemsite to end of list
+
     return (loading) ? null : (
         <Dropdown
             label={data.jcr.result.nodes.find(site => site.name === current.site).displayName}
             value={current.site}
             className={styles.siteSwitcher}
-            data={data.jcr.result.nodes.filter(s => {
-                return s.hasPermission;
-            }).sort().map(s => ({
+            data={sites.map(s => ({
                 label: s.displayName,
                 value: s.path,
                 name: s.name,
