@@ -4,7 +4,7 @@ import {useNodeInfo} from '@jahia/data-helper';
 import {useSelector} from 'react-redux';
 import {PrimaryNavItem} from '@jahia/moonstone';
 import constants from './Administration.constants';
-import Setting from '@jahia/moonstone/dist/icons/Setting';
+import {Setting} from '@jahia/moonstone';
 import React from 'react';
 
 const AdministrationGroup = () => {
