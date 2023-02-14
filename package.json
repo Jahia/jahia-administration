@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@jahia/data-helper": "^1.0.0",
-    "@jahia/moonstone": "^2.5.2",
+    "@jahia/moonstone": "^2.5.3",
     "@jahia/ui-extender": "^1.0.3",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",

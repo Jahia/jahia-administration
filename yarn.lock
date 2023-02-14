@@ -1096,10 +1096,10 @@
     eslint-plugin-react "^7.16.0"
     eslint-plugin-react-hooks "^2.2.0"
 
-"@jahia/moonstone@^2.5.2":
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/@jahia/moonstone/-/moonstone-2.5.2.tgz#08e2d42f773dc3ceb74699c6b1db327cef7df5e1"
-  integrity sha512-1cEHFgn74GFgZ3adjtW8XTd1U2zfGiSUcmU3nxMBb6bA9ZSHCPFwA3Im3PbrRJstI0rqMYu4spmFwHvJgndAWw==
+"@jahia/moonstone@^2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@jahia/moonstone/-/moonstone-2.5.3.tgz#f01bd946ce2e1ba35a4b1643990060287c7464db"
+  integrity sha512-dSegP1LS5l/B6MG+nhhvoKgWKBulL8DLxevVh2R35DW7IX/u2+yifhtwFwvFEcfE7fmYQp9NwsQ19L/EsZfoIA==
   dependencies:
     "@babel/runtime" "^7.20.13"
     clsx "^1.2.1"
