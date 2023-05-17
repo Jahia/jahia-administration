@@ -17,6 +17,11 @@ import AdministrationEmpty from './Administration.empty';
 let current;
 let dispatch;
 
+const getRegistryTarget = function (item, target) {
+    const foundTarget = item.targets.find(t => t.id === target || t.id.startsWith(target + '-'));
+    return foundTarget.id + ':' + foundTarget.priority;
+};
+
 const administrationMessageListener = event => {
     if (event.origin !== window.location.origin) {
         return;
@@ -63,7 +68,9 @@ const useTree = ({target, nodePath, mainPermission, selectedItem}) => {
             isSelectable: route.isSelectable,
             iconStart: route.icon,
             treeItemProps: {
-                'data-sel-role': route.key
+                'data-sel-role': route.key,
+                'data-registry-key': route.type + ':' + route.key,
+                'data-registry-target': getRegistryTarget(route, target)
             }
         }))
         .getData();

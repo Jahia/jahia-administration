@@ -1,7 +1,7 @@
 import {registry} from '@jahia/ui-extender';
 import constants from './Administration.constants';
 import Administration from './Administration';
-import AdministrationGroup from './AdministrationGroup';
+import AdministrationItem from './AdministrationItem';
 import React, {Suspense} from 'react';
 
 export const administrationRoutes = () => {
@@ -11,8 +11,8 @@ export const administrationRoutes = () => {
         defaultPath: constants.DEFAULT_ROUTE,
         render: v => <Suspense fallback="loading ..."><Administration match={v.match}/></Suspense>
     });
-    registry.add('primary-nav-item', 'administrationGroupItem', {
+    registry.add('primary-nav-item', 'administration', {
         targets: ['nav-root-admin:1'],
-        render: () => <AdministrationGroup/>
+        render: () => <AdministrationItem/>
     });
 };
