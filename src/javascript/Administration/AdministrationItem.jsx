@@ -7,7 +7,7 @@ import constants from './Administration.constants';
 import {Setting} from '@jahia/moonstone';
 import React from 'react';
 
-const AdministrationGroup = () => {
+const AdministrationItem = props => {
     const history = useHistory();
     const {t} = useTranslation('jahia-administration');
     const serverPermission = useNodeInfo({path: '/', language: 'en'}, {getPermissions: ['administrationAccess']});
@@ -27,7 +27,7 @@ const AdministrationGroup = () => {
 
     return (
         <PrimaryNavItem key={constants.DEFAULT_ROUTE}
-                        role="administration-menu-item"
+                        {...props}
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
                         icon={<Setting/>}
@@ -35,4 +35,4 @@ const AdministrationGroup = () => {
     );
 };
 
-export default AdministrationGroup;
+export default AdministrationItem;
