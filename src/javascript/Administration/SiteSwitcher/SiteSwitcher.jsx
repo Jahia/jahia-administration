@@ -49,17 +49,24 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
 
     const handleOnChange = item => {
         if (location.pathname.indexOf('/' + current.site + '/') >= 0) {
-            const urlToFetch = availableRoutes.find(route => route.key === selectedItem).iframeUrl.replace('editframe', 'render').replace('$site-key', item.name)
-                .replace('$lang', current.language)
-                .replace('$ui-lang', current.uiLang);
-            fetch(urlToFetch).then(result => {
-                if (result.ok) {
-                    history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
-                    callDispatch(item);
-                } else {
-                    redirectToFirstAccessibleUrl(0, availableRoutes, item);
-                }
-            });
+            const currentRoute = availableRoutes.find(route => route.key === selectedItem);
+
+            if (currentRoute.iframeUrl) {
+                const urlToFetch = currentRoute.iframeUrl.replace('editframe', 'render').replace('$site-key', item.name)
+                    .replace('$lang', current.language)
+                    .replace('$ui-lang', current.uiLang);
+                fetch(urlToFetch).then(result => {
+                    if (result.ok) {
+                        history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
+                        callDispatch(item);
+                    } else {
+                        redirectToFirstAccessibleUrl(0, availableRoutes, item);
+                    }
+                });
+            } else {
+                history.push(location.pathname.replace('/' + current.site + '/', '/' + item.name + '/'));
+                callDispatch(item);
+            }
         } else {
             callDispatch(item);
         }
