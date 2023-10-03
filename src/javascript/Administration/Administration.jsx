@@ -85,7 +85,7 @@ const useTree = ({target, nodePath, mainPermission, selectedItem}) => {
         defaultOpenedItems,
         filteredRoutes,
         defaultLanguage: (node.site === undefined ? undefined : node.site.defaultLanguage),
-        languages: (node.site === undefined ? undefined : node.site.languages.map(item => item.language))
+        languages: (node.site === undefined ? undefined : node.site.languages.filter(item => item.activeInEdit).map(item => item.language))
     };
 };
 

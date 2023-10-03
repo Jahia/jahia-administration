@@ -36,24 +36,28 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
             callDispatch(item);
         } else {
             const route = routes[index];
-            fetchRoute(route, item.name).then(result => {
-                if (result.ok) {
-                    history.push('/administration/' + item.name + '/' + route.key);
-                    callDispatch(item);
-                } else {
-                    redirectToFirstAccessibleUrl(index + 1, routes, item);
-                }
-            });
+            if (route.iframeUrl) {
+                fetchRoute(route, item.name).then(result => {
+                    if (result.ok) {
+                        history.push('/administration/' + item.name + '/' + route.key);
+                        callDispatch(item);
+                    } else {
+                        redirectToFirstAccessibleUrl(index + 1, routes, item);
+                    }
+                });
+            }
         }
     };
 
     const handleOnChange = item => {
+        const languageToUse = item.languages.indexOf(current.language) < 0 ? item.defaultLanguage : current.language;
+
         if (location.pathname.indexOf('/' + current.site + '/') >= 0) {
             const currentRoute = availableRoutes.find(route => route.key === selectedItem);
 
             if (currentRoute.iframeUrl) {
                 const urlToFetch = currentRoute.iframeUrl.replace('editframe', 'render').replace('$site-key', item.name)
-                    .replace('$lang', current.language)
+                    .replace('$lang', languageToUse)
                     .replace('$ui-lang', current.uiLang);
                 fetch(urlToFetch).then(result => {
                     if (result.ok) {
