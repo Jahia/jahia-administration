@@ -9,7 +9,7 @@ import {SiteWeb} from '@jahia/moonstone';
 import constants from './Administration.constants';
 import {Route, Switch} from 'react-router';
 import {useNodeInfo} from '@jahia/data-helper';
-import {batch, useDispatch, useSelector} from 'react-redux';
+import {batch, useDispatch, useSelector, shallowEqual} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 import PropTypes from 'prop-types';
 import AdministrationEmpty from './Administration.empty';
@@ -120,7 +120,7 @@ const Administration = ({match}) => {
     current = useSelector(state => ({
         site: state.site,
         language: state.language
-    }));
+    }), shallowEqual);
     dispatch = useDispatch();
 
     let param = match.params[0];

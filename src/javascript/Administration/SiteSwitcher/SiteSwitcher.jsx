@@ -2,7 +2,7 @@ import React from 'react';
 import {useQuery} from 'react-apollo';
 import {SitesQuery} from './SiteSwitcher.gql-querys';
 import {Dropdown} from '@jahia/moonstone';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {registry} from '@jahia/ui-extender';
 import styles from './SiteSwitcher.scss';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -13,7 +13,7 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
         site: state.site,
         uilang: state.uilang,
         language: state.language
-    }));
+    }), shallowEqual);
     const {loading, data} = useQuery(SitesQuery, {
         variables: {
             displayLanguage: current.uilang
@@ -106,6 +106,6 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
 
 SiteSwitcher.propTypes = {
     availableRoutes: PropTypes.array.isRequired,
-    selectedItem: PropTypes.string.isRequired
+    selectedItem: PropTypes.string
 };
 export default SiteSwitcher;
