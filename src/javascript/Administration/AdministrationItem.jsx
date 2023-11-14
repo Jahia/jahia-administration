@@ -1,7 +1,7 @@
 import {useHistory} from 'react-router';
 import {useTranslation} from 'react-i18next';
 import {useNodeInfo} from '@jahia/data-helper';
-import {useSelector} from 'react-redux';
+import {useSelector, shallowEqual} from 'react-redux';
 import {PrimaryNavItem} from '@jahia/moonstone';
 import constants from './Administration.constants';
 import {Setting} from '@jahia/moonstone';
@@ -11,7 +11,7 @@ const AdministrationItem = props => {
     const history = useHistory();
     const {t} = useTranslation('jahia-administration');
     const serverPermission = useNodeInfo({path: '/', language: 'en'}, {getPermissions: ['administrationAccess']});
-    const current = useSelector(state => ({site: state.site, lastVisitedPath: state.administration.path}));
+    const current = useSelector(state => ({site: state.site, lastVisitedPath: state.administration.path}), shallowEqual);
     const sitePermission = useNodeInfo({
         path: '/sites/' + current.site,
         language: 'en'
