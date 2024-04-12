@@ -1,6 +1,6 @@
 {
   "name": "@jahia/jahia-administration",
-  "version": "1.9.0",
+  "version": "1.10.0-SNAPSHOT",
   "scripts": {
     "test": "env-cmd --no-override jest",
     "testcli": "jest",
