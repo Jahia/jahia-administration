@@ -89,7 +89,7 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
 
     return (loading) ? null : (
         <Dropdown
-            label={data.jcr.result.nodes.find(site => site.name === current.site).displayName}
+            label={siteNodes.find(site => site.name === current.site)?.displayName}
             value={current.site}
             className={styles.siteSwitcher}
             data={sites.map(s => ({
