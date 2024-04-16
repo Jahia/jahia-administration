@@ -33,7 +33,7 @@
     </parent>
     <artifactId>jahia-administration</artifactId>
     <name>jahia-administration</name>
-    <version>1.10.0-SNAPSHOT</version>
+    <version>1.9.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <description>This is the custom module (jahia-administration) for running on a Jahia server.</description>
 
@@ -46,7 +46,7 @@
 
     <properties>
         <jahia-module-type>system</jahia-module-type>
-        <jahia-module-signature>MCwCFHKGkLXQHT+5qcyO8o+pPRqkCnRLAhRUHkFp+dJzZlTrBRcbf02OAmJckg==</jahia-module-signature>
+        <jahia-module-signature>MCwCFFyqrvVx+r90LWlhS3ZmCkz2uPPwAhQE45ljW8jWwWlgrwmXzFSccbDQGg==</jahia-module-signature>
         <yarn.arguments>build:production</yarn.arguments>
         <jahia-depends>graphql-dxm-provider</jahia-depends>
         <sonar.sources>src/javascript</sonar.sources>
