@@ -87,12 +87,14 @@ const SiteSwitcher = ({selectedItem, availableRoutes}) => {
     let sites = siteNodes.filter(s => s.hasPermission && s.name !== 'systemsite');
     sites.push(siteNodes.find(s => s.name === 'systemsite')); // Add systemsite to end of list
 
+    const site = siteNodes.find(site => site.name === current.site);
+
     return (loading) ? null : (
         <Dropdown
-            label={siteNodes.find(site => site.name === current.site)?.displayName}
+            label={site?.displayName}
             value={current.site}
             className={styles.siteSwitcher}
-            data={sites.map(s => ({
+            data={sites.filter(s => s !== undefined).map(s => ({
                 label: s.displayName,
                 value: s.path,
                 name: s.name,
