@@ -13,6 +13,7 @@ import {batch, useDispatch, useSelector, shallowEqual} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 import PropTypes from 'prop-types';
 import AdministrationEmpty from './Administration.empty';
+import {setTitle} from './util';
 
 let current;
 let dispatch;
@@ -114,7 +115,7 @@ function getSelectedItem(param) {
 }
 
 const Administration = ({match}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation('jahia-administration');
     const history = useHistory();
 
     current = useSelector(state => ({
@@ -161,6 +162,12 @@ const Administration = ({match}) => {
         return null;
     }
 
+    if (serverSelectedItem) {
+        setTitle(`${t('jahia-administration.label')} - ${serverSelectedItem}`);
+    } else if (siteSelectedItem) {
+        setTitle(`${t('jahia-administration.label')} - ${siteSelectedItem}`);
+    }
+
     const accordionOpenTab = siteSelectedItem || !serverResult.allowed ? constants.ACCORDION_TABS.SITE : constants.ACCORDION_TABS.SERVER;
     return (
         <LayoutModule
@@ -177,10 +184,13 @@ const Administration = ({match}) => {
                                       selectedItems={serverSelectedItem ? [serverSelectedItem] : []}
                                       defaultOpenedItems={serverResult.defaultOpenedItems}
                                       onClickItem={
-                                          (elt, event, toggleNode) => (
-                                              elt.isSelectable ?
-                                                  history.push('/administration/' + elt.id) :
-                                                  toggleNode(event))
+                                          (elt, event, toggleNode) => {
+                                              if (elt.isSelectable) {
+                                                  history.push('/administration/' + elt.id);
+                                              } else {
+                                                  toggleNode(event);
+                                              }
+                                          }
                                       }/>
                         </AccordionItem>}
                         {sitesResult.allowed &&

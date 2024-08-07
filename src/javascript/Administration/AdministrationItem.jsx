@@ -6,6 +6,7 @@ import {PrimaryNavItem} from '@jahia/moonstone';
 import constants from './Administration.constants';
 import {Setting} from '@jahia/moonstone';
 import React from 'react';
+import {setTitle} from './util';
 
 const AdministrationItem = props => {
     const history = useHistory();
@@ -31,7 +32,10 @@ const AdministrationItem = props => {
                         isSelected={history.location.pathname.startsWith(constants.DEFAULT_ROUTE)}
                         label={t('jahia-administration.label')}
                         icon={<Setting/>}
-                        onClick={() => history.push(route)}/>
+                        onClick={() => {
+                            history.push(route);
+                            setTitle(`${t('jahia-administration.label')} - ${route}`);
+                        }}/>
     );
 };
 
