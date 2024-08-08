@@ -162,12 +162,6 @@ const Administration = ({match}) => {
         return null;
     }
 
-    if (serverSelectedItem) {
-        setTitle(`${t('jahia-administration.label')} - ${serverSelectedItem}`);
-    } else if (siteSelectedItem) {
-        setTitle(`${t('jahia-administration.label')} - ${siteSelectedItem}`);
-    }
-
     const accordionOpenTab = siteSelectedItem || !serverResult.allowed ? constants.ACCORDION_TABS.SITE : constants.ACCORDION_TABS.SERVER;
     return (
         <LayoutModule
@@ -184,13 +178,10 @@ const Administration = ({match}) => {
                                       selectedItems={serverSelectedItem ? [serverSelectedItem] : []}
                                       defaultOpenedItems={serverResult.defaultOpenedItems}
                                       onClickItem={
-                                          (elt, event, toggleNode) => {
-                                              if (elt.isSelectable) {
-                                                  history.push('/administration/' + elt.id);
-                                              } else {
-                                                  toggleNode(event);
-                                              }
-                                          }
+                                          (elt, event, toggleNode) => (
+                                              elt.isSelectable ?
+                                                  history.push('/administration/' + elt.id) :
+                                                  toggleNode(event))
                                       }/>
                         </AccordionItem>}
                         {sitesResult.allowed &&
@@ -215,11 +206,27 @@ const Administration = ({match}) => {
             }
             content={
                 <Switch>
-                    {serverResult.allowed && serverResult.filteredRoutes.map(r =>
-                        <Route key={r.key} exact strict path={'/administration/' + r.key} render={props => r.render(props)}/>
+                    {serverResult.allowed && serverResult.filteredRoutes.map(r => (
+                        <Route key={r.key}
+                               exact
+                               strict
+                               path={'/administration/' + r.key}
+                               render={props => {
+                            setTitle(`${t('jahia-administration.label')} - ${r.label ? t(r.label) : r.key}`);
+                            r.render(props);
+                        }}/>
+                      )
                     )}
-                    {sitesResult.allowed && sitesResult.filteredRoutes.map(r =>
-                        <Route key={r.key} exact strict path={'/administration/:site/' + r.key} render={props => r.render(props)}/>
+                    {sitesResult.allowed && sitesResult.filteredRoutes.map(r => (
+                        <Route key={r.key}
+                               exact
+                               strict
+                               path={'/administration/:site/' + r.key}
+                               render={props => {
+                            setTitle(`${t('jahia-administration.label')} - ${r.label ? t(r.label) : r.key}`);
+                            r.render(props);
+                        }}/>
+                      )
                     )}
                     <Route exact strict path="/administration" component={AdministrationEmpty}/>
                 </Switch>
