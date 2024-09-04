@@ -1069,10 +1069,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@jahia/data-helper@1.0.12-alpha.1":
-  version "1.0.12-alpha.1"
-  resolved "https://registry.yarnpkg.com/@jahia/data-helper/-/data-helper-1.0.12-alpha.1.tgz#ecfe51ffd0ed878df7e9ff76ba2249de1ffdef88"
-  integrity sha512-w7XAWwwjM+PACcQFdycZGtp2ufCSse4xiJY16VaZiVyW4X/5Xe5PNipunWUULYqmE9aqoKRmta+ml4/kCLUjwA==
+"@jahia/data-helper@1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@jahia/data-helper/-/data-helper-1.0.12.tgz#6b30ef6caf050822be748ef5f667c206a5485c3f"
+  integrity sha512-cguuF39UlCf2v9lTlXWsRd+ntvKEUFYrAZfacfNPe/vjSI5Gp0Y72zOoX5XokoPY57IwTqFuyb6W0nCjqCQxLw==
   dependencies:
     apollo-cache "^1.3.4"
     apollo-client "^2.6.8"
