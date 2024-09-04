@@ -212,7 +212,7 @@ const Administration = ({match}) => {
                                         routeTitle={`${t('jahia-administration.label')} - ${r.label ? t(r.label) : r.key}`}
                                         path={'/administration/' + r.key}
                                         render={props => {
-                            r.render(props);
+                                            return r.render(props);
                         }}/>
                       )
                     )}
@@ -223,7 +223,7 @@ const Administration = ({match}) => {
                                         routeTitle={`${t('jahia-administration.label')} - ${r.label ? t(r.label) : r.key}`}
                                         path={'/administration/:site/' + r.key}
                                         render={props => {
-                            r.render(props);
+                           return r.render(props);
                         }}/>
                       )
                     )}
