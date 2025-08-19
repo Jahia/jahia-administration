@@ -13,6 +13,7 @@ import {batch, useDispatch, useSelector, shallowEqual} from 'react-redux';
 import SiteSwitcher from './SiteSwitcher/SiteSwitcher';
 import PropTypes from 'prop-types';
 import AdministrationEmpty from './Administration.empty';
+import {adminSetAccordion} from './Administration.redux';
 
 let current;
 let dispatch;
@@ -119,7 +120,8 @@ const Administration = ({match}) => {
 
     current = useSelector(state => ({
         site: state.site,
-        language: state.language
+        language: state.language,
+        currentAccordionItem: state.administration.accordion
     }), shallowEqual);
     dispatch = useDispatch();
 
@@ -166,11 +168,12 @@ const Administration = ({match}) => {
         <LayoutModule
             navigation={
                 <SecondaryNav header={<SecondaryNavHeader>{t('jahia-administration:jahia-administration.label')}</SecondaryNavHeader>}>
-                    <Accordion isReversed defaultOpenedItem={accordionOpenTab}>
+                    <Accordion isReversed defaultOpenedItem={accordionOpenTab} openedItem={current.currentAccordionItem !== '' ? current.currentAccordionItem : accordionOpenTab}>
                         {serverResult.allowed &&
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER}
                                        label={t('jahia-administration:jahia-administration.server')}
                                        icon={<Server/>}
+                                       onClick={() => dispatch(adminSetAccordion(constants.ACCORDION_TABS.SERVER))}
                         >
                             <TreeView isReversed
                                       data={serverResult.data}
@@ -187,6 +190,7 @@ const Administration = ({match}) => {
                         <AccordionItem id={constants.ACCORDION_TABS.SITE}
                                        label={t('jahia-administration:jahia-administration.sites')}
                                        icon={<SiteWeb/>}
+                                       onClick={() => dispatch(adminSetAccordion(constants.ACCORDION_TABS.SITE))}
                         >
                             <SiteSwitcher selectedItem={siteSelectedItem} availableRoutes={sitesResult.filteredRoutes}/>
                             <TreeView isReversed
