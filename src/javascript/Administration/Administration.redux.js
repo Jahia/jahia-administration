@@ -2,7 +2,7 @@ import {createActions, handleActions} from 'redux-actions';
 import {registry} from '@jahia/ui-extender';
 import {combineReducers} from 'redux';
 
-export const {adminSetPath} = createActions('ADMIN_SET_PATH');
+export const {adminSetPath, adminSetAccordion} = createActions('ADMIN_SET_PATH', 'ADMIN_SET_ACCORDION');
 
 const extractParamsFromUrl = pathname => {
     if (pathname.startsWith('/administration/')) {
@@ -26,8 +26,12 @@ export const administrationRedux = () => {
         '@@router/LOCATION_CHANGE': (state, action) => action.payload.location.pathname.startsWith('/administration') ? extractParamsFromUrl(action.payload.location.pathname).path : state
     }, currentValueFromUrl.path);
 
+    const accordionReducer = handleActions({
+        [adminSetAccordion]: (state, action) => action.payload
+    }, '');
+
     registry.add('redux-reducer', 'administration', {
         targets: ['root'],
-        reducer: combineReducers({path: pathReducer})
+        reducer: combineReducers({path: pathReducer, accordion: accordionReducer})
     });
 };
