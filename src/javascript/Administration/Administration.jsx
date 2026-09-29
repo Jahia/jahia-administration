@@ -168,12 +168,15 @@ const Administration = ({match}) => {
         <LayoutModule
             navigation={
                 <SecondaryNav header={<SecondaryNavHeader>{t('jahia-administration:jahia-administration.label')}</SecondaryNavHeader>}>
-                    <Accordion isReversed defaultOpenedItem={accordionOpenTab} openedItem={current.currentAccordionItem !== '' ? current.currentAccordionItem : accordionOpenTab}>
+                    <Accordion isReversed
+                               defaultOpenedItem={accordionOpenTab}
+                               openedItem={current.currentAccordionItem !== '' ? current.currentAccordionItem : accordionOpenTab}
+                               onSetOpenedItem={id => dispatch(adminSetAccordion(id))}
+                    >
                         {serverResult.allowed &&
                         <AccordionItem id={constants.ACCORDION_TABS.SERVER}
                                        label={t('jahia-administration:jahia-administration.server')}
                                        icon={<Server/>}
-                                       onClick={() => dispatch(adminSetAccordion(constants.ACCORDION_TABS.SERVER))}
                         >
                             <TreeView isReversed
                                       data={serverResult.data}
@@ -190,7 +193,6 @@ const Administration = ({match}) => {
                         <AccordionItem id={constants.ACCORDION_TABS.SITE}
                                        label={t('jahia-administration:jahia-administration.sites')}
                                        icon={<SiteWeb/>}
-                                       onClick={() => dispatch(adminSetAccordion(constants.ACCORDION_TABS.SITE))}
                         >
                             <SiteSwitcher selectedItem={siteSelectedItem} availableRoutes={sitesResult.filteredRoutes}/>
                             <TreeView isReversed
