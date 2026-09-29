@@ -170,7 +170,7 @@ const Administration = ({match}) => {
                 <SecondaryNav header={<SecondaryNavHeader>{t('jahia-administration:jahia-administration.label')}</SecondaryNavHeader>}>
                     <Accordion isReversed
                                defaultOpenedItem={accordionOpenTab}
-                               openedItem={current.currentAccordionItem !== '' ? current.currentAccordionItem : accordionOpenTab}
+                               openedItem={current.currentAccordionItem === '' ? accordionOpenTab : current.currentAccordionItem}
                                onSetOpenedItem={id => dispatch(adminSetAccordion(id))}
                     >
                         {serverResult.allowed &&
